@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mariadb://localhost:3306/greengram2024_v3
+    username: root
+    password: green502
+  servlet:
+    multipart:
+      max-file-size: 5MB
+
+mybatis:
+  mapper-locations: mappers/**/*.xml
+
+springdoc:
+  api-docs:
+    version: openapi_3_1
+  swagger-ui:
+    path: /swagger
+    operations-sorter: method
+    default-model-expand-depth: 10
+    default-models-expand-depth: 10
+    display-request-duration: true
+  cache:
+    disabled: true
+
+file:
+  directory: D:\2024-01\download\greengram_ver3\
+
+
+
+
+
+

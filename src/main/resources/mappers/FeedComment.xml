@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.greengram.feedcomment.FeedCommentMapper">
+    <insert id="postFeedComment" useGeneratedKeys="true" keyProperty="feedCommentId">
+        INSERT INTO feed_comment
+        SET feed_id = #{feedId}
+            , user_id = #{userId}
+            , comment = #{comment}
+    </insert>
+</mapper>
