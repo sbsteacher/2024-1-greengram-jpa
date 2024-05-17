@@ -8,4 +8,5 @@ public interface FeedFavoriteMapper {
     int insFeedFavorite(FeedFavoriteReq p);
     int delFeedFavorite(FeedFavoriteReq p);
 
+
 }
