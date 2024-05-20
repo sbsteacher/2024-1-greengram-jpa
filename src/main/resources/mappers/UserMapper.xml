@@ -16,5 +16,33 @@
         WHERE uid = #{uid}
     </select>
 
+    <select id="selProfileUserInfo">
+        SELECT A.nm, A.pic, A.created_at AS createdAt
+             , B.feedCnt, B.favCnt
+             , C.following, C.follower, C.followState
+          FROM user A
+         INNER JOIN (
+                SELECT A.writer_id
+                     , COUNT(distinct A.feed_id) AS feedCnt
+                     , COUNT(B.user_id) AS favCnt
+                  FROM feed A
+                  LEFT JOIN feed_favorite B
+                    ON A.feed_id = B.feed_id
+                 WHERE A.writer_id = #{profileUserId}
+        ) B
+         INNER JOIN (
+                SELECT SUM(IF(from_user_id = #{profileUserId}, 1, 0)) AS following
+                     , SUM(IF(to_user_id = #{profileUserId}, 1, 0)) AS follower
+                     , IFNULL(
+                        SUM(
+                            IF(from_user_id = #{signedUserId} AND to_user_id = #{profileUserId}, 1, 0)
+                            +
+                            IF(from_user_id = #{profileUserId} AND to_user_id = #{signedUserId}, 2, 0)
+                        )
+                       , 0) AS followState
+                FROM user_follow
+        ) C
+          WHERE A.user_id = #{profileUserId}
+    </select>
 
 </mapper>

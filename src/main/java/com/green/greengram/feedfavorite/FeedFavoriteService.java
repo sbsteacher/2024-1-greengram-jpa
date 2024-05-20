@@ -12,9 +12,7 @@ public class FeedFavoriteService {
     private final FeedFavoriteMapper mapper;
 
     public int toggleReq(FeedFavoriteReq p) {
-
         int result = mapper.delFeedFavorite(p);
-
         if(result == 1) {
             return 0;
         }

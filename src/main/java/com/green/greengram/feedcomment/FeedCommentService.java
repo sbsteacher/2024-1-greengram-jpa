@@ -22,6 +22,7 @@ public class FeedCommentService {
 
         return p.getFeedCommentId();
     }
+
     public int delFeedComment(FeedCommentDeleteReq p){
         return mapper.delFeedComment(p);
     }
