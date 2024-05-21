@@ -34,6 +34,7 @@ public class FeedController {
                 .build();
 
     }
+
     @GetMapping
     public ResultDto<List<FeedGetRes>> getFeed(@ParameterObject @ModelAttribute FeedGetReq p){
         List<FeedGetRes> list = service.getFeed(p);

@@ -17,6 +17,7 @@
             ( #{feedId} , #{pic} )
         </foreach>
     </insert>
+
     <select id="getFeed">
         SELECT A.feed_id AS feedId, A.contents AS contents, A.location AS location,
                A.created_at AS createdAt, B.user_id AS writerId, B.nm AS writerNm,
@@ -27,9 +28,13 @@
         LEFT JOIN feed_favorite C
         ON A.feed_id = C.feed_id
         AND C.user_id = #{signedUserId}
+        <if test=" profileUserId != null and profileUserId > 0 ">
+            WHERE A.writer_id = #{profileUserId}
+        </if>
         ORDER BY A.feed_id DESC
         LIMIT #{startIdx}, #{size}
     </select>
+
     <select id="getFeedPicsByFeedId">
         SELECT pic
         FROM feed_pics
