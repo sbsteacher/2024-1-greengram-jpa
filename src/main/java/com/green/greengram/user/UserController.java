@@ -45,4 +45,17 @@ public class UserController {
                 .resultData(result)
                 .build();
     }
+
+    @PatchMapping
+    public ResultDto<String> patchProfilePic(@RequestPart UserProfilePatchReq p) {
+        String result = service.patchProfilePic(p);
+
+        return ResultDto.<String>builder()
+                .statusCode(HttpStatus.OK)
+                .resultMsg(HttpStatus.OK.toString())
+                .resultData(result)
+                .build();
+    }
+
+
 }

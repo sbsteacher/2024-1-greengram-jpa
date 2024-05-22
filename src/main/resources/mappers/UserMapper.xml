@@ -45,4 +45,10 @@
           WHERE A.user_id = #{profileUserId}
     </select>
 
+    <update id="updProfilePic">
+        UPDATE user
+           SET pic = #{picName}
+         WHERE user_id = #{signedUserId}
+    </update>
+
 </mapper>

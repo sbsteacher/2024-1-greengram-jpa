@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 public class CustomFileUtils {
 
-    private final String uploadPath;
+    public final String uploadPath;
 
     public CustomFileUtils(@Value("${file.directory}") String uploadPath) {
         this.uploadPath = uploadPath;
@@ -50,6 +50,23 @@ public class CustomFileUtils {
     public void transferTo(MultipartFile mf, String target) throws Exception {
         File saveFile = new File(uploadPath, target); //최종 경로
         mf.transferTo(saveFile);
+    }
+
+    //폴더 삭제                       "/user/3"
+    public void deleteFolder(String absoluteFolderPath) { //D:\2024-01\download\greengram_ver3 상대 주소
+        File folder = new File(absoluteFolderPath);
+        if(folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+
+            for(File f : files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f.getAbsolutePath());
+                } else {
+                    f.delete();
+                }
+            }
+            folder.delete();
+        }
     }
 
 

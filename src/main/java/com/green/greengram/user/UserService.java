@@ -5,6 +5,7 @@ import com.green.greengram.user.model.*;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -52,5 +53,26 @@ public class UserService {
 
     public UserInfoGetRes getUserInfo(UserInfoGetReq p) {
         return mapper.selProfileUserInfo(p);
+    }
+
+
+    @Transactional
+    public String patchProfilePic(UserProfilePatchReq p) {
+        String fileNm = customFileUtils.makeRandomFileName(p.getPic());
+        p.setPicName(fileNm);
+        mapper.updProfilePic(p);
+
+        //기존 폴더 삭제
+        try {
+            String folderPath = String.format("%s/user/%d", customFileUtils.uploadPath, p.getSignedUserId());
+            customFileUtils.deleteFolder(folderPath);
+
+            customFileUtils.makeFolders(folderPath);
+            String filePath = String.format("%s/%s", folderPath, fileNm);
+            customFileUtils.transferTo(p.getPic(), filePath);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return fileNm;
     }
 }
