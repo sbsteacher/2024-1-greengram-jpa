@@ -46,7 +46,7 @@ public class UserController {
                 .build();
     }
 
-    @PatchMapping(value = "pic", consumes = "multipart/form-data")
+    @PatchMapping(value = "pic")
     public ResultDto<String> patchProfilePic(@ModelAttribute UserProfilePatchReq p) {
         String result = service.patchProfilePic(p);
 
