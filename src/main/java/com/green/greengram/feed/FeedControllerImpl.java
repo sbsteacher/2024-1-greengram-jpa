@@ -5,7 +5,6 @@ import com.green.greengram.feed.model.FeedGetReq;
 import com.green.greengram.feed.model.FeedGetRes;
 import com.green.greengram.feed.model.FeedPostReq;
 import com.green.greengram.feed.model.FeedPostRes;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -19,9 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/feed")
-public class FeedController {
-    private final FeedService service;
-
+public class FeedControllerImpl {
+    private final FeedServiceImpl service;
 
     @PostMapping
     public ResultDto<FeedPostRes> postFeed(@RequestPart List<MultipartFile> pics, @RequestPart FeedPostReq p){

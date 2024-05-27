@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/feed/favorite")
-public class FeedFavoriteController {
-    private final FeedFavoriteService service;
+public class FeedFavoriteControllerImpl {
+    private final FeedFavoriteServiceImpl service;
 
     @GetMapping
     public ResultDto<Integer> toggleReq(FeedFavoriteReq p) {

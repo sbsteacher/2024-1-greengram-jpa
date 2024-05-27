@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GreengramVer3ApplicationTests {
+class GreengramTddApplicationTests {
 
     @Test
     void contextLoads() {

@@ -5,9 +5,6 @@ import com.green.greengram.common.model.ResultDto;
 import com.green.greengram.feedcomment.model.FeedCommentDeleteReq;
 import com.green.greengram.feedcomment.model.FeedCommentGetRes;
 import com.green.greengram.feedcomment.model.FeedCommentPostReq;
-import com.green.greengram.feedfavorite.FeedFavoriteService;
-import com.green.greengram.feedfavorite.model.FeedFavoriteReq;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,11 +16,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/feed/comment")
-public class FeedCommentController {
-    private final FeedCommentService service;
+public class FeedCommentControllerImpl {
+    private final FeedCommentServiceImpl service;
 
 
     @PostMapping
+    //@RequestMapping(method = RequestMethod.POST)
     public ResultDto<Long> postFeedComment(@RequestBody FeedCommentPostReq p) {
         long result = service.postFeedComment(p);
 

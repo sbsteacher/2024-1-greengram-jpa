@@ -12,7 +12,7 @@ public class UserInfoGetReq {
     @Schema(name = "signed_user_id", defaultValue = "15", description = "로그인한 사용자 PK")
     private long signedUserId;
     @Schema(name = "profile_user_id", defaultValue = "17", description = "프로필 사용자 PK")
-    private long profileUserId;
+    private Long profileUserId;
 
     @ConstructorProperties({ "signed_user_id", "profile_user_id" })
     public UserInfoGetReq(long signedUserId, long profileUserId) {

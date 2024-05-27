@@ -3,8 +3,6 @@ package com.green.greengram.feedcomment;
 import com.green.greengram.feedcomment.model.FeedCommentDeleteReq;
 import com.green.greengram.feedcomment.model.FeedCommentGetRes;
 import com.green.greengram.feedcomment.model.FeedCommentPostReq;
-import com.green.greengram.feedfavorite.FeedFavoriteMapper;
-import com.green.greengram.feedfavorite.model.FeedFavoriteReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +12,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FeedCommentService {
+public class FeedCommentServiceImpl {
     private final FeedCommentMapper mapper;
 
     public long postFeedComment(FeedCommentPostReq p) {
