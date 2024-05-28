@@ -99,6 +99,61 @@ class UserFollowMapperTest {
     }
 
     @Test
-    void delUserFollow() {
+    void delUserFollowMe() {
+
+    }
+
+    @Test
+    void delUserFollowYou() {
+        UserFollowReq countParam = new UserFollowReq(0, 0);
+        List<UserFollowEntity> totalList1 = mapper.selUserFollowListForTest(countParam);
+        int recordCountOrigin = totalList1.size();
+
+        //없는 pk 삭제
+        UserFollowReq p2 = new UserFollowReq(10, 20);
+        int affectedRows2 = mapper.delUserFollow(p2);
+        assertEquals(0, affectedRows2, "삭제가 되면 안되나 삭제가 되었음");
+
+        //1, 2 삭제
+        UserFollowReq p3 = new UserFollowReq(1, 2);
+        List<UserFollowEntity> p3List = mapper.selUserFollowListForTest(p3);
+        assertEquals(1, p3List.size());
+
+        int affectedRows3 = mapper.delUserFollow(p3);
+        assertEquals(1, affectedRows3, "삭제 이상");
+
+        List<UserFollowEntity> totalList2 = mapper.selUserFollowListForTest(countParam);
+        int recordCountFirst = totalList2.size();
+        assertEquals(1, recordCountOrigin - recordCountFirst);
+
+        List<UserFollowEntity> p3List2 = mapper.selUserFollowListForTest(p3);
+        assertEquals(0, p3List2.size());
+    }
+
+    @Test
+    void delUserFollowYou2() {
+        UserFollowReq countParam = new UserFollowReq(0, 0);
+        List<UserFollowEntity> totalList1 = mapper.selUserFollowListForTest(countParam);
+        int recordCountOrigin = totalList1.size();
+
+        //없는 pk 삭제
+        UserFollowReq p2 = new UserFollowReq(12, 22);
+        int affectedRows2 = mapper.delUserFollow(p2);
+        assertEquals(0, affectedRows2, "삭제가 되면 안되나 삭제가 되었음");
+
+        //1, 2 삭제
+        UserFollowReq p3 = new UserFollowReq(2, 3);
+        List<UserFollowEntity> p3List = mapper.selUserFollowListForTest(p3);
+        assertEquals(1, p3List.size());
+
+        int affectedRows3 = mapper.delUserFollow(p3);
+        assertEquals(1, affectedRows3, "삭제 이상");
+
+        List<UserFollowEntity> totalList2 = mapper.selUserFollowListForTest(countParam);
+        int recordCountFirst = totalList2.size();
+        assertEquals(1, recordCountOrigin - recordCountFirst);
+
+        List<UserFollowEntity> p3List2 = mapper.selUserFollowListForTest(p3);
+        assertEquals(0, p3List2.size());
     }
 }
