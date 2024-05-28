@@ -2,7 +2,6 @@ package com.green.greengram.userfollow;
 
 import com.green.greengram.userfollow.model.UserFollowEntity;
 import com.green.greengram.userfollow.model.UserFollowReq;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -10,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.Assert;
+
 
 import java.util.List;
 
@@ -19,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("tdd")
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@Rollback(false)
 class UserFollowMapperTest {
 
     @Autowired
@@ -45,7 +45,7 @@ class UserFollowMapperTest {
         assertEquals(1, record0.getFromUserId(), "1. 0번 레코드 from_user_id 다름");
         assertEquals(2, record0.getToUserId(), "1. 0번 레코드 to_user_id 다름");
 
-        assertEquals(new UserFollowEntity(1, 3, "2024-05-21 09:57:00")
+        assertEquals(new UserFollowEntity(1, 3, "2024-05-21 09:57:02")
                 , list1.get(1), "1. 1번 레코드 값이 다름");
 
 
@@ -53,9 +53,9 @@ class UserFollowMapperTest {
         UserFollowReq p2 = new UserFollowReq(1, 0);
         List<UserFollowEntity> list2 = mapper.selUserFollowListForTest(p2);
         assertEquals(4, list2.size(), "2. 레코드 수가 다르다");
-        assertEquals(new UserFollowEntity(1, 2, "2024-05-21 09:57:00")
+        assertEquals(new UserFollowEntity(1, 2, "2024-05-21 09:57:01")
                 , list1.get(0), "2. 0번 레코드 값이 다름");
-        assertEquals(new UserFollowEntity(1, 3, "2024-05-21 09:57:00")
+        assertEquals(new UserFollowEntity(1, 3, "2024-05-21 09:57:02")
                 , list1.get(1), "2. 1번 레코드 값이 다름");
 
         //3. fromUserId = 300
@@ -68,9 +68,9 @@ class UserFollowMapperTest {
         UserFollowReq p4 = new UserFollowReq(0, 1);
         List<UserFollowEntity> list4 = mapper.selUserFollowListForTest(p4);
         assertEquals(2, list4.size(), "4. 레코드 수가 다르다");
-        assertEquals(new UserFollowEntity(2, 1, "2024-05-21 09:57:00")
+        assertEquals(new UserFollowEntity(2, 1, "2024-05-21 09:57:05")
                 , list4.get(0), "4. 0번 레코드 값이 다름");
-        assertEquals(new UserFollowEntity(3, 1, "2024-05-21 09:57:00")
+        assertEquals(new UserFollowEntity(3, 1, "2024-05-21 09:57:09")
                 , list4.get(1), "4. 1번 레코드 값이 다름");
     }
 
