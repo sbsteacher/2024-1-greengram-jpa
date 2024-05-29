@@ -7,6 +7,22 @@
         , user_id = #{userId}
     </insert>
 
+    <select id="selFeedFavoriteForTest">
+        SELECT feed_id AS feedId
+             , user_id AS userId
+             , created_at AS createdAt
+         FROM feed_favorite
+        <where>
+            <if test=" feedId > 0 ">
+                feed_id = #{feedId}
+            </if>
+            <if test=" userId > 0 ">
+                AND user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY feed_id, user_id
+    </select>
+
     <delete id="delFeedFavorite">
         DELETE FROM feed_favorite
         WHERE feed_id = #{feedId} AND user_id = #{userId}
