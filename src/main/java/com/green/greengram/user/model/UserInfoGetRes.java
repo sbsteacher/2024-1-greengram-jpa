@@ -1,10 +1,12 @@
 package com.green.greengram.user.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class UserInfoGetRes {
     private String nm;
     private String pic;
