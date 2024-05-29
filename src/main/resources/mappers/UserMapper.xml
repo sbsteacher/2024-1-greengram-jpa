@@ -11,9 +11,6 @@
               <if test=" userId > 0 ">
                   user_id = #{userId}
               </if>
-              <if test=" uid != null and uid != '' ">
-                  AND uid = #{uid}
-              </if>
           </where>
     </select>
 
@@ -27,7 +24,10 @@
     </insert>
 
     <select id="signInPost">
-        SELECT user_id, uid, upw, nm, pic, created_at, updated_at
+        SELECT user_id AS userId
+             , created_at AS createdAt
+             , updated_at AS updatedAt
+             , uid, upw, nm, pic
         FROM user
         WHERE uid = #{uid}
     </select>
