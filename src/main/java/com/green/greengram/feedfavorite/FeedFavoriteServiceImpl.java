@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class FeedFavoriteServiceImpl {
+public class FeedFavoriteServiceImpl implements FeedFavoriteService {
     private final FeedFavoriteMapper mapper;
 
     public int toggleReq(FeedFavoriteReq p) {
@@ -18,6 +18,5 @@ public class FeedFavoriteServiceImpl {
         }
         return mapper.insFeedFavorite(p);
     }
-
 
 }
