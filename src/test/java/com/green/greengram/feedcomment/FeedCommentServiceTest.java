@@ -1,6 +1,7 @@
 package com.green.greengram.feedcomment;
 
 import com.green.greengram.feedcomment.model.FeedCommentDeleteReq;
+import com.green.greengram.feedcomment.model.FeedCommentGetRes;
 import com.green.greengram.feedcomment.model.FeedCommentPostReq;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,6 +65,42 @@ class FeedCommentServiceTest {
     }
 
     @Test
+    @DisplayName("댓글 리스트")
     void feedCommentListGet() {
+        List<FeedCommentGetRes> list1 = new ArrayList();
+
+        FeedCommentGetRes res1 = new FeedCommentGetRes();
+        FeedCommentGetRes res2 = new FeedCommentGetRes();
+        list1.add(res1);
+        list1.add(res2);
+        
+        res1.setFeedCommentId(10);
+        res1.setComment("res1");
+        res1.setCreatedAt("2024-05-30 12:52:02");
+        res1.setWriterId(100);
+        res1.setWriterNm("홍길동");
+        res1.setWriterPic("홍길동.jpg");
+
+        res2.setFeedCommentId(20);
+        res2.setComment("res2");
+        res2.setCreatedAt("2024-05-30 12:54:02");
+        res2.setWriterId(200);
+        res2.setWriterNm("남길동");
+        res2.setWriterPic("남길동.jpg");
+
+        List<FeedCommentGetRes> list2 = new ArrayList();
+        long paramFeedId1 = 5;
+        long paramFeedId2 = 7;
+        given(mapper.feedCommentList(paramFeedId1)).willReturn(list1);
+        given(mapper.feedCommentList(paramFeedId2)).willReturn(list2);
+
+        List<FeedCommentGetRes> result1 = service.feedCommentListGet(paramFeedId1);
+        assertEquals(list1, result1, "1. 리턴값이 다름");
+
+        List<FeedCommentGetRes> result2 = service.feedCommentListGet(paramFeedId2);
+        assertEquals(list2.size(), result2.size(), "2. 리턴값이 다름");
+
+        verify(mapper).feedCommentList(paramFeedId1);
+        verify(mapper).feedCommentList(paramFeedId2);
     }
 }
