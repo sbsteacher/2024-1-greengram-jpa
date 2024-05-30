@@ -12,19 +12,22 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FeedCommentServiceImpl {
+public class FeedCommentServiceImpl implements FeedCommentService {
     private final FeedCommentMapper mapper;
 
+    @Override
     public long postFeedComment(FeedCommentPostReq p) {
         mapper.postFeedComment(p);
-
         return p.getFeedCommentId();
     }
 
+    @Override
     public int delFeedComment(FeedCommentDeleteReq p){
         return mapper.delFeedComment(p);
     }
-    List<FeedCommentGetRes> feedCommentListGet(long feedId) {
+
+    @Override
+    public List<FeedCommentGetRes> feedCommentListGet(long feedId) {
         return mapper.feedCommentList(feedId);
     }
 }
