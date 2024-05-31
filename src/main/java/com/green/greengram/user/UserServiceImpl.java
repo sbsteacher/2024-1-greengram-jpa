@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final CustomFileUtils customFileUtils;
 
@@ -32,7 +32,7 @@ public class UserServiceImpl {
             e.printStackTrace();
             throw new RuntimeException("실패");
         }
-        return  result;
+        return result;
     }
 
     public SignInPostRes signInPost (SignInPostReq p) {

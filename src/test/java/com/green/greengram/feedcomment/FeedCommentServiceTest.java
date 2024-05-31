@@ -42,8 +42,8 @@ class FeedCommentServiceTest {
         long result2 = service.postFeedComment(p2);
         assertEquals(p2.getFeedCommentId(), result2);
 
-        verify(mapper).postFeedComment(p1);
-        verify(mapper).postFeedComment(p2);
+        verify(mapper, times(1)).postFeedComment(p1);
+        verify(mapper, times(1)).postFeedComment(p2);
     }
 
     @Test
@@ -94,8 +94,32 @@ class FeedCommentServiceTest {
         given(mapper.feedCommentList(paramFeedId1)).willReturn(list1);
         given(mapper.feedCommentList(paramFeedId2)).willReturn(list2);
 
+
+        List<FeedCommentGetRes> list3 = new ArrayList();
+        FeedCommentGetRes res10 = new FeedCommentGetRes();
+        FeedCommentGetRes res11 = new FeedCommentGetRes();
+
+        list3.add(res10);
+        list3.add(res11);
+
+        res10.setFeedCommentId(10);
+        res10.setComment("res1");
+        res10.setCreatedAt("2024-05-30 12:52:02");
+        res10.setWriterId(100);
+        res10.setWriterNm("홍길동");
+        res10.setWriterPic("홍길동.jpg");
+
+        res11.setFeedCommentId(20);
+        res11.setComment("res2");
+        res11.setCreatedAt("2024-05-30 12:54:02");
+        res11.setWriterId(200);
+        res11.setWriterNm("남길동");
+        res11.setWriterPic("남길동.jpg");
+
+
         List<FeedCommentGetRes> result1 = service.feedCommentListGet(paramFeedId1);
         assertEquals(list1, result1, "1. 리턴값이 다름");
+        assertEquals(list3, result1, "1-2. 리턴값이 다름");
 
         List<FeedCommentGetRes> result2 = service.feedCommentListGet(paramFeedId2);
         assertEquals(list2.size(), result2.size(), "2. 리턴값이 다름");

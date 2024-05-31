@@ -1,5 +1,6 @@
 package com.green.greengram.feedfavorite;
 
+import com.green.greengram.common.CustomFileUtils;
 import com.green.greengram.feedfavorite.model.FeedFavoriteReq;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
