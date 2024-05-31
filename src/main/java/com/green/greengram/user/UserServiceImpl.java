@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
             String filePath = String.format("%s/%s", midPath, fileNm);
             customFileUtils.transferTo(p.getPic(), filePath);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("프로필 사진 수정 실패");
         }
         return fileNm;
     }

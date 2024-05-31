@@ -129,12 +129,33 @@ class UserServiceTest {
             mockedStatic.verify(() -> BCrypt.checkpw(req2.getUpw(), user2.getUpw()));
         }
 
+        SignInPostReq req3 = new SignInPostReq();
+        req3.setUid("id3");
+        given(mapper.signInPost(req3.getUid())).willReturn(null);
 
+        Throwable ex1 = assertThrows(RuntimeException.class, () -> {
+           service.signInPost(req3);
+        }, "아이디 없음 예외 처리 안 함");
+        assertEquals("아이디를 확인해주세요.", ex1.getMessage(), "아이디 없음 에러 메시지 다름");
+
+        SignInPostReq req4 = new SignInPostReq();
+        req4.setUid("id4");
+        req4.setUpw("6666");
+
+        String hashedUpw4 = BCrypt.hashpw("7777", BCrypt.gensalt());
+        User user4 = new User(100, req4.getUid(), hashedUpw4, "홍길동4", "사진4.jpg", null, null);
+
+        given(mapper.signInPost(user4.getUid())).willReturn(user4);
+        Throwable ex2 = assertThrows(RuntimeException.class, () -> {
+            service.signInPost(req4);
+        }, "비밀번호 다름 예외 처리 안 함");
+        assertEquals("비밀번호를 확인해주세요.", ex2.getMessage(), "비밀번호 다름, 에러 메시지 다름");
 
     }
 
     @Test
     void getUserInfo() {
+
     }
 
     @Test
