@@ -53,6 +53,9 @@ public class UserServiceImpl implements UserService {
 
     public UserInfoGetRes getUserInfo(UserInfoGetReq p) {
         return mapper.selProfileUserInfo(p);
+//        UserInfoGetRes res2 = new UserInfoGetRes();
+//        res2.setNm("test2");
+//        return res2;
     }
 
 

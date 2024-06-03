@@ -1,20 +1,13 @@
 package com.green.greengram.user;
 
 import com.green.greengram.common.CustomFileUtils;
-import com.green.greengram.user.model.SignInPostReq;
-import com.green.greengram.user.model.SignInPostRes;
-import com.green.greengram.user.model.SignUpPostReq;
-import com.green.greengram.user.model.User;
-import org.junit.jupiter.api.BeforeEach;
+import com.green.greengram.user.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.MockedStatic;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
@@ -155,6 +148,21 @@ class UserServiceTest {
 
     @Test
     void getUserInfo() {
+        UserInfoGetReq p1 = new UserInfoGetReq(2, 1);
+        UserInfoGetRes result1 = new UserInfoGetRes();
+        result1.setNm("test1");
+        given(mapper.selProfileUserInfo(p1)).willReturn(result1);
+
+        UserInfoGetReq p2 = new UserInfoGetReq(3, 1);
+        UserInfoGetRes result2 = new UserInfoGetRes();
+        result2.setNm("test2");
+        given(mapper.selProfileUserInfo(p2)).willReturn(result2);
+
+        UserInfoGetRes res1 = service.getUserInfo(p1);
+        assertEquals(result1, res1);
+
+        UserInfoGetRes res2 = service.getUserInfo(p2);
+        assertEquals(result2, res2);
 
     }
 
