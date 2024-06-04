@@ -3,11 +3,13 @@ package com.green.greengram.user;
 import com.green.greengram.common.CustomFileUtils;
 import com.green.greengram.user.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -16,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
     public int signUpPostReq(MultipartFile pic, SignUpPostReq p){
         String saveFileName = customFileUtils.makeRandomFileName(pic);
+
         p.setPic(saveFileName);
         String password = BCrypt.hashpw(p.getUpw(),BCrypt.gensalt());
         p.setUpw(password);
@@ -62,11 +65,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String patchProfilePic(UserProfilePatchReq p) {
         String fileNm = customFileUtils.makeRandomFileName(p.getPic());
+        log.info("saveFileName: {}", fileNm);
         p.setPicName(fileNm);
         mapper.updProfilePic(p);
 
         //기존 폴더 삭제
         try {
+            //  D:/2024-01/download/greengram_tdd/user/600
             String midPath = String.format("user/%d", p.getSignedUserId());
             String delAbsoluteFolderPath = String.format("%s%s", customFileUtils.uploadPath, midPath);
             customFileUtils.deleteFolder(delAbsoluteFolderPath);

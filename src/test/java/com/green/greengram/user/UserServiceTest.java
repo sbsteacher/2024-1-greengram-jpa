@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -36,7 +38,7 @@ class UserServiceTest {
     @Value("${file.directory}") String uploadPath;
     @MockBean UserMapper mapper;
     @Autowired UserService service;
-
+    @Autowired CustomFileUtils customFileUtils;
 
     @Test
     void signUpPostReq() throws IOException {
@@ -167,6 +169,42 @@ class UserServiceTest {
     }
 
     @Test
-    void patchProfilePic() {
+    void patchProfilePic() throws Exception {
+        long signedUserId1 = 500;
+        final String ORIGIN_FILE_PATH = String.format("%stest/%s", uploadPath, "a.jpg");
+        File originFile = new File(ORIGIN_FILE_PATH);
+        String midPath1 = String.format("%suser/%d", uploadPath, signedUserId1);
+        File copyFile1 = new File(midPath1, "a.jpg");
+
+        customFileUtils.deleteFolder(midPath1);
+        customFileUtils.makeFolders("user/" + signedUserId1);
+        Files.copy(originFile.toPath(), copyFile1.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        UserProfilePatchReq p1 = new UserProfilePatchReq();
+        p1.setSignedUserId(signedUserId1);
+        MultipartFile fm1 = new MockMultipartFile(
+                "pic", "b.jpg", "image/jpg",
+                new FileInputStream(String.format("%stest/b.jpg", uploadPath))
+        );
+        p1.setPic(fm1);
+        String fileNm1 = service.patchProfilePic(p1);
+        assertNotNull(fileNm1, "1. 파일명이 null로 넘어왔음");
+        // 1. midPath1폴더가 존재해야함
+        File midPath1Folder = new File(midPath1);
+        assertEquals(true, midPath1Folder.exists());
+
+        // 2. 해당 폴더에 파일은 1개만 존재
+        assertEquals(1, midPath1Folder.listFiles().length);
+
+        // 3. 그 파일의 파일명이 fileNm1과 같아야 한다.
+        File file1 = midPath1Folder.listFiles()[0];
+        assertEquals(fileNm1, file1.getName());
+
+        verify(mapper).updProfilePic(p1);
+    }
+
+    @Test
+    void patchProfilePic2() throws Exception {
+
     }
 }

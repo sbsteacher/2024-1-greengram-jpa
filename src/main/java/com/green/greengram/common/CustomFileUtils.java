@@ -72,3 +72,12 @@ public class CustomFileUtils {
 
 }
 
+//class CustomFileUtils2 {
+//    public String makeFolders(String path) {
+//        return null;
+//    }
+//
+//    public String getExt(String fileName) {
+//        return null;
+//    }
+//}
