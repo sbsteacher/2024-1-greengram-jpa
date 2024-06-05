@@ -9,7 +9,6 @@ import java.beans.ConstructorProperties;
 
 @Getter
 @ToString
-
 public class Paging {
 
     @Schema(example = "1", description = "선택한 page")

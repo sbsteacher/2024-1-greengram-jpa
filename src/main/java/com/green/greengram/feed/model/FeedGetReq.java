@@ -5,10 +5,12 @@ import com.green.greengram.common.model.Paging;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.bind.annotation.BindParam;
 
 @Getter
 @Setter
+@ToString
 public class FeedGetReq extends Paging {
 
     @Schema(name="signed_user_id")

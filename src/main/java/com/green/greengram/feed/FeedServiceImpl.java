@@ -61,7 +61,7 @@ public class FeedServiceImpl implements FeedService {
             List<String> pics = mapper.getFeedPicsByFeedId(res.getFeedId());
             res.setPics(pics);
 
-            List<FeedCommentGetRes> comments= mapper.getFeedComment(res.getFeedId());
+            List<FeedCommentGetRes> comments = mapper.getFeedComment(res.getFeedId());
             if(comments.size()==COMMENT_SIZE_PER_FEED){
                 res.setIsMoreComment(1);
                 comments.remove(COMMENT_SIZE_PER_FEED - 1);
