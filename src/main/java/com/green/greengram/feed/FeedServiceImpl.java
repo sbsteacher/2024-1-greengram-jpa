@@ -16,12 +16,12 @@ import static com.green.greengram.common.GlobalConst.COMMENT_SIZE_PER_FEED;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class FeedServiceImpl {
+public class FeedServiceImpl implements FeedService {
     private final FeedMapper mapper;
     private final CustomFileUtils customFileUtils;
 
     @Transactional
-    public FeedPostRes postFeed(List<MultipartFile> pics , FeedPostReq p){
+    public FeedPostRes postFeed(List<MultipartFile> pics, FeedPostReq p){
 
         mapper.postFeed(p);
         if(pics == null){
@@ -29,32 +29,29 @@ public class FeedServiceImpl {
                     .feedId(p.getFeedId())
                     .build();
         }
-
-
         FeedPicPostDto dto = FeedPicPostDto.builder()
                             .feedId(p.getFeedId())
                             .build();
         try {
-            String path = String.format("feed/%d",p.getFeedId());
+            String path = String.format("feed/%d", p.getFeedId());
             customFileUtils.makeFolders(path);
             for(MultipartFile pic : pics){
                 String fileName = customFileUtils.makeRandomFileName(pic);
-                String target = String.format("%s/%s" , path,fileName);
-                customFileUtils.transferTo(pic , target);
+                String target = String.format("%s/%s" , path, fileName);
+                customFileUtils.transferTo(pic, target);
                 dto.getFileNames().add(fileName);
             }
             mapper.postFeedPics(dto);
 
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("Feed등록 오류");
         }
+
         return FeedPostRes.builder()
                 .feedId(dto.getFeedId())
                 .pics(dto.getFileNames())
                 .build();
-
-
     }
 
     public List<FeedGetRes> getFeed(FeedGetReq p){
