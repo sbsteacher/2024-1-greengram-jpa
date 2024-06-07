@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -27,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserFollowControllerTest {
     @Autowired private ObjectMapper om;
     @Autowired private MockMvc mvc;
-    @Autowired private UserFollowController controller;
     @MockBean private UserFollowServiceImpl service;
 
     @Test
@@ -43,7 +45,13 @@ class UserFollowControllerTest {
                 .resultData(resultData)
                 .build();
 
+        Map expectedResultMap = new HashMap();
+        expectedResultMap.put("statusCode", HttpStatus.OK);
+        expectedResultMap.put("resultMsg", HttpStatus.OK.toString());
+        expectedResultMap.put("resultData", resultData);
+
         String expectedResultJson = om.writeValueAsString(expectedResult);
+        //String expectedResultJson = om.writeValueAsString(expectedResultMap);
 
         mvc.perform(
             MockMvcRequestBuilders
