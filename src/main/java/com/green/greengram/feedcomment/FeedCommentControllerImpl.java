@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/feed/comment")
 public class FeedCommentControllerImpl {
-    private final FeedCommentServiceImpl service;
+    private final FeedCommentService service;
 
 
     @PostMapping
