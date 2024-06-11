@@ -27,12 +27,9 @@ class FeedFavoriteServiceTest {
     @Test
     void toggleReq() {
         //given - when - then
-        FeedFavoriteReq p1 = new FeedFavoriteReq(); // return 0
-        p1.setFeedId(1);
-        p1.setUserId(2);
-        FeedFavoriteReq p2 = new FeedFavoriteReq(); // return 1
-        p2.setFeedId(10);
-        p2.setUserId(20);
+        FeedFavoriteReq p1 = new FeedFavoriteReq(1, 2); // return 0
+        FeedFavoriteReq p2 = new FeedFavoriteReq(10, 20); // return 1
+
 
         given(mapper.delFeedFavorite(p1)).willReturn(0);
         given(mapper.delFeedFavorite(p2)).willReturn(1);

@@ -32,14 +32,13 @@ class FeedFavoriteMapperTest {
 
     @Test
     void selFeedFavoriteForTestYou() {
-        FeedFavoriteReq entireParam = new FeedFavoriteReq();
+        FeedFavoriteReq entireParam = new FeedFavoriteReq(5, 1);
         List<FeedFavoriteEntity> entireList = mapper.selFeedFavoriteForTest(entireParam);
 
         assertEquals(10, entireList.size(), "전체 레코드 가져오는 부분");
 
         FeedFavoriteEntity res0 = new FeedFavoriteEntity();
-        res0.setFeedId(5);
-        res0.setUserId(1);
+
         res0.setCreatedAt("2024-05-22 11:50:59");
         assertEquals(res0, entireList.get(0), "0번 레코드");
 

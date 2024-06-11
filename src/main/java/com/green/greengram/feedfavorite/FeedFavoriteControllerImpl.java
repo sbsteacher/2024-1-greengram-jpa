@@ -14,8 +14,8 @@ public class FeedFavoriteControllerImpl implements FeedFavoriteController {
 
     @GetMapping
     public ResultDto<Integer> toggleReq(FeedFavoriteReq p) {
-        int result = service.toggleReq(p);
 
+        int result = service.toggleReq(p);
         return ResultDto.<Integer>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg(result == 0? "좋아요 취소" : "좋아요")

@@ -40,10 +40,19 @@ spring:
     init:
       mode: always
 
+---
 
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:log4jdbc:mariadb://192.168.0.144:3306/db_odd_first_5
+    username: odd_first_5
+    password: intel
 
-
-
+file:
+  directory: /home/download
 
 
 
