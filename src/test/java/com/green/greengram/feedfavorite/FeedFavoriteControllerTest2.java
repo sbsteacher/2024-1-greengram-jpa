@@ -13,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,64 +25,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import({CharEncodingConfiguration.class })
 @WebMvcTest({ FeedFavoriteControllerImpl.class })
-class FeedFavoriteControllerTest {
+class FeedFavoriteControllerTest2 {
 
     @Autowired private ObjectMapper om;
     @Autowired private MockMvc mvc;
     @MockBean private FeedFavoriteService service;
 
-    @Test
-    void toggleReq() throws Exception {
-        //given
-        FeedFavoriteReq p = new FeedFavoriteReq(1, 2);
-
-        int resultData = 1;
+    void proc(FeedFavoriteReq p, Map<String, Object> result) throws Exception {
+        int resultData = (int)result.get("resultData");
         given(service.toggleReq(p)).willReturn(resultData);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap();
         params.add("feed_id", String.valueOf(p.getFeedId()));
         params.add("user_id", String.valueOf(p.getUserId()));
 
-        Map<String, Object> result = new HashMap();
-        result.put("statusCode", HttpStatus.OK);
-        result.put("resultMsg", "좋아요");
-        result.put("resultData", resultData);
-
         String expectedResJson = om.writeValueAsString(result);
 
-        //when
-        mvc.perform(
-              get("/api/feed/favorite").params(params)
-        )
-        //then
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedResJson))
-                .andDo(print());
-
-        verify(service).toggleReq(p);
-    }
-
-
-    @Test
-    void toggleReq2() throws Exception {
-        //given
-        FeedFavoriteReq p = new FeedFavoriteReq(1, 2);
-
-        int resultData = 2;
-        given(service.toggleReq(p)).willReturn(resultData);
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap();
-        params.add("feed_id", String.valueOf(p.getFeedId()));
-        params.add("user_id", String.valueOf(p.getUserId()));
-
-        Map<String, Object> result = new HashMap();
-        result.put("statusCode", HttpStatus.OK);
-        result.put("resultMsg", "좋아요");
-        result.put("resultData", resultData);
-
-        String expectedResJson = om.writeValueAsString(result);
-
-        //when
         mvc.perform(
             get("/api/feed/favorite").params(params)
         )
@@ -90,5 +50,38 @@ class FeedFavoriteControllerTest {
         .andDo(print());
 
         verify(service).toggleReq(p);
+    }
+
+    @Test
+    void toggleReq() throws Exception {
+        //given
+        FeedFavoriteReq p = new FeedFavoriteReq(1, 2);
+        int resultData = 1;
+        Map<String, Object> result = new HashMap();
+        result.put("statusCode", HttpStatus.OK);
+        result.put("resultMsg", "좋아요");
+        result.put("resultData", resultData);
+
+        proc(p, result);
+    }
+
+
+    @Test
+    void toggleReq2() throws Exception {
+        //given
+        FeedFavoriteReq p = new FeedFavoriteReq(2, 4);
+        int resultData = 2;
+        Map<String, Object> result = new HashMap();
+        result.put("statusCode", HttpStatus.OK);
+        result.put("resultMsg", "좋아요");
+        result.put("resultData", resultData);
+
+        proc(p, result);
+    }
+
+    @Test
+    void toggleReq3() throws Exception {
+        //resultMsg값이 "좋아요 취소"가 리턴이 되는지 확인
+
     }
 }
