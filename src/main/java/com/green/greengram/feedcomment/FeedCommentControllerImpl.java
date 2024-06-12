@@ -48,8 +48,8 @@ public class FeedCommentControllerImpl implements FeedCommentController {
 
         return ResultDto.<Integer>builder()
                 .statusCode(HttpStatus.OK)
-                .resultData(result)
                 .resultMsg("삭제되었습니다.")
+                .resultData(result)
                 .build();
     }
 
