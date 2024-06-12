@@ -16,13 +16,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/feed/comment")
-public class FeedCommentControllerImpl {
+public class FeedCommentControllerImpl implements FeedCommentController {
     private final FeedCommentService service;
 
-
     @PostMapping
-    //@RequestMapping(method = RequestMethod.POST)
     public ResultDto<Long> postFeedComment(@RequestBody FeedCommentPostReq p) {
+        log.info("p: {}", p);
         long result = service.postFeedComment(p);
 
         return ResultDto.<Long>builder()
@@ -32,26 +31,28 @@ public class FeedCommentControllerImpl {
                 .build();
     }
 
+    @GetMapping
+    public ResultDto<List<FeedCommentGetRes>> getFeedCommentList(@RequestParam (name = "feed_id") long feedId) {
+        List<FeedCommentGetRes> list = service.feedCommentListGet(feedId);
+
+        return ResultDto.<List<FeedCommentGetRes>>builder()
+                .statusCode(HttpStatus.OK)
+                .resultMsg(String.format("rows: %,d", list.size()))
+                .resultData(list)
+                .build();
+    }
+
     @DeleteMapping
-    public ResultDto<Integer> delfeedFavorite(@ModelAttribute FeedCommentDeleteReq p){
+    public ResultDto<Integer> delFeedFavorite(@ModelAttribute FeedCommentDeleteReq p){
         int result = service.delFeedComment(p);
 
         return ResultDto.<Integer>builder()
                 .statusCode(HttpStatus.OK)
                 .resultData(result)
-                .resultMsg("")
+                .resultMsg("삭제되었습니다.")
                 .build();
     }
 
-    @GetMapping
-    public ResultDto<List<FeedCommentGetRes>>feedCommentListGet(@RequestParam (name = "feed_id") long feedId) {
-        List<FeedCommentGetRes> list = service.feedCommentListGet(feedId);
 
-        return ResultDto.<List<FeedCommentGetRes>>builder()
-                .statusCode(HttpStatus.OK)
-                .resultData(list)
-                .resultMsg(String.format("rows: %,d",list.size()))
-                .build();
-    }
 
 }
