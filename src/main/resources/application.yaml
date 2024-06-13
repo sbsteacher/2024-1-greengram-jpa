@@ -26,7 +26,7 @@ springdoc:
     disabled: true
 
 file:
-  directory: D:\2024-01\download\greengram_tdd\
+  directory: D:\2024-01\download\greengram_tdd
 
 ---
 
