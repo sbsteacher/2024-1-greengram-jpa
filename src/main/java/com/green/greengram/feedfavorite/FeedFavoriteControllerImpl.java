@@ -22,8 +22,4 @@ public class FeedFavoriteControllerImpl implements FeedFavoriteController {
                 .resultData(result)
                 .build();
     }
-
-
-
-
 }

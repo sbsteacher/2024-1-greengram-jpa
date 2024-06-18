@@ -128,6 +128,7 @@ class UserFollowControllerTest {
         .andExpect(content().json(expectedResultJson))
         .andDo(print());
 
+
         verify(service).deleteUserFollow(p);
 
     }
