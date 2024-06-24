@@ -2,14 +2,11 @@ package com.green.greengram.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Configuration
 public class SecurityConfiguration {
@@ -28,7 +25,7 @@ public class SecurityConfiguration {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ) //시큐리티에서 세션 사용을 하지 않음을 세팅
                 .httpBasic(http -> http.disable())
-                // (서버사이드 렌더링 하지 않는다. 즉 html화면을 백엔드가 만들지 않는다.)
+                // (SSR 서버사이드 렌더링 하지 않는다. 즉 html화면을 백엔드가 만들지 않는다.)
                 // 백엔드에서 화면을 만들지 않더라도 위 세팅을 끄지 않아도 괜찮다. 사용하지 않는 걸 끔으로써 리소스 확보
                 // 하기 위해서 사용하는 개념
                 // 정리하면, 시큐리티에서 제공해주는 로그인 화면 사용하지 않겠다.
@@ -36,18 +33,31 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) //CSRF (CORS랑 많이 헷갈려 함)
                 //requestMatchers
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/user/sign-up"
+                        auth.requestMatchers(
+                                        //회원가입, 로그인 인증이 안 되어 있더라도 사용 가능하게 세팅
+                                         "/api/user/sign-up"
                                         ,"/api/user/sign-in"
+
+                                        //swagger 사용할 수 있게 세팅
                                         , "/swagger"
                                         , "/swagger-ui/**"
                                         , "/v3/api-docs/**"
+
+                                        //프론트 화면 보일수 있게 세팅
                                         ,"/"
                                         ,"/index.html"
                                         , "/css/**"
                                         , "/js/**"
                                         , "/static/**"
+
+                                        //프론트에서 사용하는 라우터 주소
+                                        , "/sign-in"
+                                        , "/sign-up"
+                                        , "/profile/*"
+                                        , "/feed"
+
                                 ).permitAll()
-                            .anyRequest().authenticated()
+                            .anyRequest().authenticated() //로그인이 되어 있어야만 허용
                 )
 
 
@@ -80,7 +90,10 @@ public class SecurityConfiguration {
 */
     }
 
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }
 
