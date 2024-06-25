@@ -1,7 +1,9 @@
 package com.green.greengram.user;
 
+import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.CustomFileUtils;
 import com.green.greengram.security.JwtTokenProviderV2;
+import com.green.greengram.security.MyUser;
 import com.green.greengram.security.MyUserDetails;
 import com.green.greengram.user.model.*;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final CustomFileUtils customFileUtils;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProviderV2 jwtTokenProvider;
+    private final CookieUtils cookieUtils;
 
 
     public int signUpPostReq(MultipartFile pic, SignUpPostReq p){
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public SignInPostRes signInPost (SignInPostReq p) {
+    public SignInPostRes signInPost(SignInPostReq p) {
         User user = mapper.signInPost(p.getUid());
 
         if (user == null) {
@@ -56,14 +59,13 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("비밀번호를 확인해주세요.");
         }
 
-        //UserDetails userDetails = new MyUserDetails(user.getUserId(), "ROLE_USER");
-        UserDetails userDetails = MyUserDetails.builder()
+        MyUser myUser = MyUser.builder()
                 .userId(user.getUserId())
                 .role("ROLE_USER")
                 .build();
 
-        String accessToken = jwtTokenProvider.generateAccessToken(userDetails);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(userDetails);
+        String accessToken = jwtTokenProvider.generateAccessToken(myUser);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(myUser);
 
         //refreshToken은 보안 쿠키를 이용해서 처리
 

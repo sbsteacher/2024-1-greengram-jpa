@@ -1,23 +1,22 @@
 package com.green.greengram.security;
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
-@Data
-@Builder
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
+@Setter
+@Getter
 public class MyUserDetails implements UserDetails {
 
-    private long userId; //로그인한 사용자의 pk값
-    private String role; //사용자 권한, ROLE_권한이름
-
+    private MyUser myUser;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -25,7 +24,7 @@ public class MyUserDetails implements UserDetails {
 //        list.add(new SimpleGrantedAuthority(role));
 //        return list;
 
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+        return Collections.singletonList(new SimpleGrantedAuthority(myUser.getRole()));
     }
 
     @Override

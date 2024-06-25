@@ -32,22 +32,21 @@ public class JwtTokenProviderV2 {
         //암호화, 복호화할 때 사용하는 키를 생성하는 부분, decode메소드에 보내는 아규먼트값은 우리가 설정한 문자열
     }
 
-    public String generateAccessToken(UserDetails userDetails) {
-        return generateToken(userDetails, appProperties.getJwt().getAccessTokenExpiry());
+    public String generateAccessToken(MyUser myUser) {
+        return generateToken(myUser, appProperties.getJwt().getAccessTokenExpiry());
         //yaml파일에서 app.jwt.access-token-expiry 내용을 가져오는 부분
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
-        return generateToken(userDetails, appProperties.getJwt().getRefreshTokenExpiry());
+    public String generateRefreshToken(MyUser myUser) {
+        return generateToken(myUser, appProperties.getJwt().getRefreshTokenExpiry());
         //yaml파일에서 app.jwt.refresh-token-expiry 내용을 가져오는 부분
     }
 
-    private String generateToken(UserDetails userDetails, long tokenValidMilliSecond) {
+    private String generateToken(MyUser myUser, long tokenValidMilliSecond) {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis())) // JWT 생성일시
                 .expiration(new Date(System.currentTimeMillis() + tokenValidMilliSecond)) // JWT 만료일시
-
-                .claims(createClaims(userDetails)) // claims는 payload에 저장하고 싶은 내용을 저장
+                .claims(createClaims(myUser)) // claims는 payload에 저장하고 싶은 내용을 저장
 
                 .signWith(secretKey, Jwts.SIG.HS512) // 서명 (JWT 암호화 선택, 위변조 검증)
                 .compact(); //토큰 생성
@@ -55,9 +54,9 @@ public class JwtTokenProviderV2 {
         //  .메소드호출.메소드호출.메소드호출   >>  체이닝 기법, 원리는 메소드호출 시 자신의 주소값 리턴을 하기 때문
     }
 
-    private Claims createClaims(UserDetails userDetails) {
+    private Claims createClaims(MyUser myUser) {
         try {
-            String json = om.writeValueAsString(userDetails); // 객체 to JSON
+            String json = om.writeValueAsString(myUser); // 객체 to JSON
             return Jwts.claims().add("signedUser", json).build(); // Claims에 JSON 저장
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +77,10 @@ public class JwtTokenProviderV2 {
         try {
             Claims claims = getAllClaims(token); //JWT(인증코드)에 저장되어 있는 Claims를 얻어온다.
             String json = (String)claims.get("signedUser"); //Claims에 저장되어 있는 값을 얻어온다. (그것이 JSON(데이터))
-            return om.readValue(json, MyUserDetails.class); //JSON > 객체로 변환 (그것이 UserDetails, 정확히는 MyUserDetails)
+            MyUser myUser = om.readValue(json, MyUser.class); //JSON > 객체로 변환 (그것이 UserDetails, 정확히는 MyUserDetails)
+            MyUserDetails myUserDetails = new MyUserDetails();
+            myUserDetails.setMyUser(myUser);
+            return myUserDetails;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -113,20 +115,23 @@ public class JwtTokenProviderV2 {
 
     //요청이 오면 JWT를 열어보는 부분 > 헤더에서 토큰(JWT)을 꺼낸다.
     public String resolveToken(HttpServletRequest req) {
-        //FE가 BE요청을 보낼 때 (로그인을 했다면)항상 JWT를 보낼건데 header에 저장해서 보낸다.
-        String auth = req.getHeader(appProperties.getJwt().getHeaderSchemaName());
+        //FE가 BE요청을 보낼 때 (로그인을 했다면)항상 JWT를 보낼건데 header에 서로 약속한 key에 저장해서 보낸다.
+        String jwt = req.getHeader(appProperties.getJwt().getHeaderSchemaName());
         // String auth = req.getHeader("authorization"); 이렇게 작성한 것과 같음. key값은 변경가능
-        if (auth == null) { return null; }
+        if (jwt == null) { return null; }
 
         //위 if를 지나쳤다면 FE가 header에 authorization 키에 데이터를 담아서 보내왔다는 뜻.
         //auth에는 "Bearer JWT"문자열이 있을 것이다. 문자열이 'Bearer'로 시작하는지 체크
 
         // if(auth.startsWith("Bearer")) { //auth에 저장되어있는 문자열이 "Bearer"로 시작하면 true, 아니면 false
-        if(!auth.startsWith(appProperties.getJwt().getTokenType())) {
+        // FE와 약속을 만들어야 함.
+        // authorization: Bearer JWT문자열
+        if(!jwt.startsWith(appProperties.getJwt().getTokenType())) {
             return null;
         }
 
-        return auth.substring(appProperties.getJwt().getTokenType().length()).trim();
+        //순수한 JWT문자열만 뽑아내기 위한 문자열 자르기 + trim(양쪽 빈칸 제거)
+        return jwt.substring(appProperties.getJwt().getTokenType().length()).trim();
     }
 
 }
