@@ -1,4 +1,4 @@
-package com.green.greengram.security;
+package com.green.greengram.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,5 +1,8 @@
 package com.green.greengram.security;
 
+import com.green.greengram.security.jwt.JwtAuthenticationAccessDeniedHandler;
+import com.green.greengram.security.jwt.JwtAuthenticationEntryPoint;
+import com.green.greengram.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,11 +46,15 @@ public class SecurityConfiguration {
                                         //회원가입, 로그인 인증이 안 되어 있더라도 사용 가능하게 세팅
                                          "/api/user/sign-up"
                                         ,"/api/user/sign-in"
+                                        ,"/api/user/access-token"
 
                                         //swagger 사용할 수 있게 세팅
                                         , "/swagger"
                                         , "/swagger-ui/**"
                                         , "/v3/api-docs/**"
+
+                                        //사진
+                                        , "/pic/**"
 
                                         //프론트 화면 보일수 있게 세팅
                                         ,"/"
@@ -66,7 +73,9 @@ public class SecurityConfiguration {
                             .anyRequest().authenticated() //로그인이 되어 있어야만 허용
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                                                         .accessDeniedHandler(new JwtAuthenticationAccessDeniedHandler())
+                )
 
                 /*
                 //만약, permitAll메소드가 void였다면 아래와 같이 작성을 해야함

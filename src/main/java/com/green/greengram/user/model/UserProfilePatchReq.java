@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 public class UserProfilePatchReq {
+    @JsonIgnore
     private long signedUserId;
     private MultipartFile pic;
 

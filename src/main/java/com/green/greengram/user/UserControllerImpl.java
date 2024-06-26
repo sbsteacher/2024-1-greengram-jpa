@@ -2,12 +2,16 @@ package com.green.greengram.user;
 
 import com.green.greengram.common.model.ResultDto;
 import com.green.greengram.user.model.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -25,13 +29,24 @@ public class UserControllerImpl {
     }
 
     @PostMapping("sign-in")
-    public ResultDto<SignInPostRes> signInPost(@RequestBody SignInPostReq p) {
-        SignInPostRes result = service.signInPost(p);
+    public ResultDto<SignInPostRes> signInPost(HttpServletResponse res, @RequestBody SignInPostReq p) {
+        SignInPostRes result = service.signInPost(res, p);
 
         return ResultDto.<SignInPostRes>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg("로그인 성공")
                 .resultData(result)
+                .build();
+    }
+
+    @GetMapping("access-token")
+    public ResultDto<Map> getAccessToken(HttpServletRequest req) {
+        Map map = service.getAccessToken(req);
+
+        return ResultDto.<Map>builder()
+                .statusCode(HttpStatus.OK)
+                .resultMsg("Access Token 발급")
+                .resultData(map)
                 .build();
     }
 

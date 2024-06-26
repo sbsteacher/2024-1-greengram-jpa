@@ -1,5 +1,6 @@
 package com.green.greengram.feed.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.greengram.common.GlobalConst;
 import com.green.greengram.common.model.Paging;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.BindParam;
 @ToString
 public class FeedGetReq extends Paging {
 
-    @Schema(name="signed_user_id")
+    @JsonIgnore
+    //@Schema(name="signed_user_id")
     private long signedUserId;
 
     @Schema(name="profile_user_id", description = "프로필 사용자 ID (Not Required), 프로필 화면에서 사용")

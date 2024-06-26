@@ -1,7 +1,8 @@
-package com.green.greengram.security;
+package com.green.greengram.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.greengram.common.AppProperties;
+import com.green.greengram.security.MyUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 

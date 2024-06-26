@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+
 @NoArgsConstructor
 @Setter
 @Getter

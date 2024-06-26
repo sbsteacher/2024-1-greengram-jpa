@@ -1,11 +1,16 @@
 package com.green.greengram.user;
 
+import com.green.greengram.common.AppProperties;
 import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.CustomFileUtils;
-import com.green.greengram.security.JwtTokenProviderV2;
+import com.green.greengram.security.AuthenticationFacade;
+import com.green.greengram.security.jwt.JwtTokenProviderV2;
 import com.green.greengram.security.MyUser;
 import com.green.greengram.security.MyUserDetails;
 import com.green.greengram.user.model.*;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
@@ -14,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -24,7 +32,10 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProviderV2 jwtTokenProvider;
     private final CookieUtils cookieUtils;
+    private final AuthenticationFacade authenticationFacade;
+    private final AppProperties appProperties;
 
+    //SecurityContextHolder > Context > Authentication(UsernamePasswordAuthenticationToken) > MyUserDetails > MyUser
 
     public int signUpPostReq(MultipartFile pic, SignUpPostReq p){
         String saveFileName = customFileUtils.makeRandomFileName(pic);
@@ -49,7 +60,7 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    public SignInPostRes signInPost(SignInPostReq p) {
+    public SignInPostRes signInPost(HttpServletResponse res, SignInPostReq p) {
         User user = mapper.signInPost(p.getUid());
 
         if (user == null) {
@@ -68,6 +79,9 @@ public class UserServiceImpl implements UserService {
         String refreshToken = jwtTokenProvider.generateRefreshToken(myUser);
 
         //refreshToken은 보안 쿠키를 이용해서 처리
+        int refreshTokenMaxAge = appProperties.getJwt().getRefreshTokenCookieMaxAge();
+        cookieUtils.deleteCookie(res, "refresh-token");
+        cookieUtils.setCookie(res, "refresh-token", refreshToken, refreshTokenMaxAge);
 
         return SignInPostRes.builder()
                 .userId(user.getUserId())
@@ -77,7 +91,28 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    public Map getAccessToken(HttpServletRequest req) {
+        Cookie cookie = cookieUtils.getCookie(req, "refresh-token");
+        if(cookie == null) { // refresh-token 값이 쿠키에 존재 여부
+            throw new RuntimeException();
+        }
+        String refreshToken = cookie.getValue();
+        if(!jwtTokenProvider.isValidateToken(refreshToken)) { //refresh-token 만료시간 체크
+            throw new RuntimeException();
+        }
+
+        UserDetails auth = jwtTokenProvider.getUserDetailsFromToken(refreshToken);
+        MyUser myUser = ((MyUserDetails)auth).getMyUser();
+
+        String accessToken = jwtTokenProvider.generateAccessToken(myUser);
+
+        Map map = new HashMap();
+        map.put("accessToken", accessToken);
+        return map;
+    }
+
     public UserInfoGetRes getUserInfo(UserInfoGetReq p) {
+        p.setSignedUserId(authenticationFacade.getLoginUserId());
         return mapper.selProfileUserInfo(p);
 //        UserInfoGetRes res2 = new UserInfoGetRes();
 //        res2.setNm("test2");
@@ -87,6 +122,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public String patchProfilePic(UserProfilePatchReq p) {
+        p.setSignedUserId(authenticationFacade.getLoginUserId());
         String fileNm = customFileUtils.makeRandomFileName(p.getPic());
         log.info("saveFileName: {}", fileNm);
         p.setPicName(fileNm);
@@ -96,7 +132,7 @@ public class UserServiceImpl implements UserService {
         try {
             //  D:/2024-01/download/greengram_tdd/user/600
             String midPath = String.format("user/%d", p.getSignedUserId());
-            String delAbsoluteFolderPath = String.format("%s%s", customFileUtils.uploadPath, midPath);
+            String delAbsoluteFolderPath = String.format("%s/%s", customFileUtils.uploadPath, midPath);
             customFileUtils.deleteFolder(delAbsoluteFolderPath);
 
             customFileUtils.makeFolders(midPath);

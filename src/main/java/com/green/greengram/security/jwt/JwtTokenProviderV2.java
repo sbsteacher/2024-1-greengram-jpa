@@ -1,7 +1,9 @@
-package com.green.greengram.security;
+package com.green.greengram.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.greengram.common.AppProperties;
+import com.green.greengram.security.MyUser;
+import com.green.greengram.security.MyUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -73,7 +75,7 @@ public class JwtTokenProviderV2 {
                 .getPayload(); // JWT 안에 들어있는 payload (Claims)를 리턴
     }
 
-    private UserDetails getUserDetailsFromToken(String token) {
+    public UserDetails getUserDetailsFromToken(String token) {
         try {
             Claims claims = getAllClaims(token); //JWT(인증코드)에 저장되어 있는 Claims를 얻어온다.
             String json = (String)claims.get("signedUser"); //Claims에 저장되어 있는 값을 얻어온다. (그것이 JSON(데이터))
