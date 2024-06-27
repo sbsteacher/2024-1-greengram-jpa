@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.greengram.feed.FeedMapper">
+
+    <insert id="postFeed" useGeneratedKeys="true" keyProperty="feedId">
+        INSERT INTO feed
+        SET  writer_id = #{userId},
+            contents = #{contents},
+            location = #{location}
+    </insert>
+
+    <insert id="postFeedPics">
+        INSERT INTO feed_pics
+        ( feed_id , pic )
+        VALUES
+        <foreach item="pic" collection="fileNames" separator=",">
+            ( #{feedId} , #{pic} )
+        </foreach>
+    </insert>
+
+    <select id="getFeed">
+        SELECT A.feed_id AS feedId, A.contents AS contents, A.location AS location,
+               A.created_at AS createdAt, B.user_id AS writerId, B.nm AS writerNm,
+               B.pic AS writerPic, IF(C.feed_id IS null, 0, 1) AS isFav
+        FROM feed A
+        INNER JOIN user B
+        ON A.writer_id = B.user_id
+        LEFT JOIN feed_favorite C
+        ON A.feed_id = C.feed_id
+        AND C.user_id = #{signedUserId}
+        <if test=" profileUserId != null and profileUserId > 0 ">
+            WHERE A.writer_id = #{profileUserId}
+        </if>
+        ORDER BY A.feed_id DESC
+        LIMIT #{startIdx}, #{size}
+    </select>
+
+    <select id="getFeedPicsByFeedId">
+        SELECT pic
+        FROM feed_pics
+        WHERE feed_id = #{feedId}
+    </select>
+
+    <select  id="getFeedComment">
+        SELECT A.feed_comment_id AS feedCommentId, A.comment, A.created_at AS createdAt,
+               B.user_id AS writerId, B.nm AS writerNm, B.pic AS writerPic
+        FROM feed_comment A
+        INNER JOIN user B
+        ON A.user_id = B.user_id
+        WHERE A.feed_id = #{feed_id}
+        ORDER BY A.created_at ASC
+        LIMIT 4
+    </select>
+
+</mapper>

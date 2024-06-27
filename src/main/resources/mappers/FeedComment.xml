@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.greengram.feedcomment.FeedCommentMapper">
+    <insert id="postFeedComment" useGeneratedKeys="true" keyProperty="feedCommentId">
+        INSERT INTO feed_comment
+        SET feed_id = #{feedId}
+            , user_id = #{userId}
+            , comment = #{comment}
+    </insert>
+
+    <delete id="delFeedComment">
+        DELETE FROM feed_comment
+        WHERE feed_comment_id = #{feedCommentId}
+        AND user_id = #{signedUserId}
+    </delete>
+
+    <select id="feedCommentList">
+        SELECT A.feed_comment_id AS feedCommentId, A.comment, A.created_at AS createdAt
+        , B.user_id AS writerId, B.nm AS writerNm, B.pic AS writerPic
+        FROM feed_comment A
+        INNER JOIN user B
+        ON A.user_id = B.user_id
+        WHERE feed_id = #{feedId}
+        LIMIT 3, 9999
+
+    </select>
+
+
+</mapper>
