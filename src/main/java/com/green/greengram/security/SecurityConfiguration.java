@@ -55,6 +55,7 @@ public class SecurityConfiguration {
 
                                         //사진
                                         , "/pic/**"
+                                        , "/fimg/**"
 
                                         //프론트 화면 보일수 있게 세팅
                                         ,"/"

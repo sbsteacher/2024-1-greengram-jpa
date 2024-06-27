@@ -32,8 +32,8 @@ class FeedFavoriteControllerTest {
     @Test
     void toggleReq() throws Exception {
         //given
-        FeedFavoriteReq p = new FeedFavoriteReq(1, 2);
-
+        FeedFavoriteReq p = new FeedFavoriteReq(1);
+        p.setUserId(2);
         int resultData = 1;
         given(service.toggleReq(p)).willReturn(resultData);
 

@@ -36,7 +36,8 @@ class UserFollowControllerTest {
 
     @Test
     void postUserFollow() throws Exception {
-        UserFollowReq p = new UserFollowReq(1, 2);
+        UserFollowReq p = new UserFollowReq(1);
+        p.setFromUserId(2);
         int resultData = 1;
         given(service.postUserFollow(p)).willReturn(resultData);
         String json = om.writeValueAsString(p);
@@ -71,7 +72,8 @@ class UserFollowControllerTest {
 
     @Test
     void postUserFollow2() throws Exception {
-        UserFollowReq p = new UserFollowReq(1, 2);
+        UserFollowReq p = new UserFollowReq(1);
+        p.setFromUserId(2);
         int resultData = 10;
         given(service.postUserFollow(p)).willReturn(resultData);
         String json = om.writeValueAsString(p);
@@ -104,7 +106,8 @@ class UserFollowControllerTest {
 
     @Test
     void deleteUserFollow() throws Exception {
-        UserFollowReq p = new UserFollowReq(4, 7);
+        UserFollowReq p = new UserFollowReq(4);
+        p.setFromUserId(7);
         int resultData = 1;
         given(service.deleteUserFollow(p)).willReturn(resultData);
 

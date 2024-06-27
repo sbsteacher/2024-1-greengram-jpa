@@ -25,7 +25,8 @@ public class UserFollowIntegrationTest extends BaseIntegrationTest {
     @Rollback(false)
     @DisplayName("post - 유저팔로우")
     public void postUserFollow() throws Exception {
-        UserFollowReq p = new UserFollowReq(4, 1);
+        UserFollowReq p = new UserFollowReq(4);
+        p.setFromUserId(1);
         String reqJson = om.writeValueAsString(p);
 
         MvcResult mr = mvc.perform(

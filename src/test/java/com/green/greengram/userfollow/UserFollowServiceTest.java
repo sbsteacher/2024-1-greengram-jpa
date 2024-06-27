@@ -26,9 +26,12 @@ class UserFollowServiceTest {
     //given - when - then
     @Test
     void postUserFollow() {
-        UserFollowReq p1 = new UserFollowReq(1, 2);
-        UserFollowReq p2 = new UserFollowReq(1, 3);
-        UserFollowReq p3 = new UserFollowReq(1, 4);
+        UserFollowReq p1 = new UserFollowReq(1);
+        p1.setFromUserId(2);
+        UserFollowReq p2 = new UserFollowReq(1);
+        p2.setFromUserId(3);
+        UserFollowReq p3 = new UserFollowReq(1);
+        p3.setFromUserId(4);
 
         given(mapper.insUserFollow(p1)).willReturn(0);
         given(mapper.insUserFollow(p2)).willReturn(1);
@@ -45,9 +48,12 @@ class UserFollowServiceTest {
 
     @Test
     void deleteUserFollow() {
-        UserFollowReq p1 = new UserFollowReq(1, 2);
-        UserFollowReq p2 = new UserFollowReq(1, 3);
-        UserFollowReq p3 = new UserFollowReq(1, 4);
+        UserFollowReq p1 = new UserFollowReq(1);
+        p1.setFromUserId(2);
+        UserFollowReq p2 = new UserFollowReq(1);
+        p2.setFromUserId(3);
+        UserFollowReq p3 = new UserFollowReq(1);
+        p3.setFromUserId(4);
 
         given(mapper.delUserFollow(p1)).willReturn(0);
         given(mapper.delUserFollow(p2)).willReturn(1);

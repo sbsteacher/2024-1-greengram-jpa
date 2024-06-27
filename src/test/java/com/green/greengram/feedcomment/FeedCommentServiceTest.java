@@ -49,8 +49,10 @@ class FeedCommentServiceTest {
     @Test
     @DisplayName("댓글 삭제")
     void delFeedComment() {
-        FeedCommentDeleteReq p1 = new FeedCommentDeleteReq(10, 20);
-        FeedCommentDeleteReq p2 = new FeedCommentDeleteReq(100, 200);
+        FeedCommentDeleteReq p1 = new FeedCommentDeleteReq(10);
+        p1.setSignedUserId(20);
+        FeedCommentDeleteReq p2 = new FeedCommentDeleteReq(100);
+        p2.setSignedUserId(200);
 
         given(mapper.delFeedComment(p1)).willReturn(1);
         given(mapper.delFeedComment(p2)).willReturn(2);

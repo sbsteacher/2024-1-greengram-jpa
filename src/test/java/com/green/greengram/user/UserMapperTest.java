@@ -40,7 +40,8 @@ class UserMapperTest {
 
     @Test
     void selProfileUserInfo() {
-        UserInfoGetReq req1 = new UserInfoGetReq(2, 1);
+        UserInfoGetReq req1 = new UserInfoGetReq(2);
+        req1.setSignedUserId(1);
         UserInfoGetRes res1 = mapper.selProfileUserInfo(req1);
 
         UserInfoGetRes expectedRes1 = new UserInfoGetRes();

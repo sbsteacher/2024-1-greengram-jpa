@@ -193,7 +193,8 @@ class FeedCommentControllerTest {
 
     @Test
     void delFeedFavorite() throws Exception {
-        FeedCommentDeleteReq p = new FeedCommentDeleteReq(1, 2);
+        FeedCommentDeleteReq p = new FeedCommentDeleteReq(1);
+        p.setSignedUserId(2);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap();
         params.add("feed_comment_id", String.valueOf(p.getFeedCommentId()));

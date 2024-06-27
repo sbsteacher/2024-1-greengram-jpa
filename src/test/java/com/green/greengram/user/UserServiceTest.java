@@ -109,14 +109,15 @@ class UserServiceTest {
             mockedStatic.when(() -> BCrypt.checkpw(req1.getUpw(), user1.getUpw())).thenReturn(true);
             mockedStatic.when(() -> BCrypt.checkpw(req2.getUpw(), user2.getUpw())).thenReturn(true);
 
-            SignInPostRes res1 = service.signInPost(req1);
+            SignInPostRes res1 = service.signInPost(null, req1);
             assertEquals(user1.getUserId(), res1.getUserId(), "1. userId 다름");
             assertEquals(user1.getNm(), res1.getNm(), "1. nm 다름");
             assertEquals(user1.getPic(), res1.getPic(), "1. pic 다름");
 
             mockedStatic.verify(() -> BCrypt.checkpw(req1.getUpw(), user1.getUpw()));
 
-            SignInPostRes res2 = service.signInPost(req2);
+            SignInPostRes res2 = service.signInPost(null, req2);
+
             assertEquals(user2.getUserId(), res2.getUserId(), "2. userId 다름");
             assertEquals(user2.getNm(), res2.getNm(), "2. nm 다름");
             assertEquals(user2.getPic(), res2.getPic(), "2. pic 다름");
@@ -129,7 +130,7 @@ class UserServiceTest {
         given(mapper.signInPost(req3.getUid())).willReturn(null);
 
         Throwable ex1 = assertThrows(RuntimeException.class, () -> {
-           service.signInPost(req3);
+           service.signInPost(null, req3);
         }, "아이디 없음 예외 처리 안 함");
         assertEquals("아이디를 확인해주세요.", ex1.getMessage(), "아이디 없음 에러 메시지 다름");
 
@@ -142,7 +143,7 @@ class UserServiceTest {
 
         given(mapper.signInPost(user4.getUid())).willReturn(user4);
         Throwable ex2 = assertThrows(RuntimeException.class, () -> {
-            service.signInPost(req4);
+            service.signInPost(null, req4);
         }, "비밀번호 다름 예외 처리 안 함");
         assertEquals("비밀번호를 확인해주세요.", ex2.getMessage(), "비밀번호 다름, 에러 메시지 다름");
 
@@ -150,12 +151,14 @@ class UserServiceTest {
 
     @Test
     void getUserInfo() {
-        UserInfoGetReq p1 = new UserInfoGetReq(2, 1);
+        UserInfoGetReq p1 = new UserInfoGetReq(2);
+        p1.setSignedUserId(1);
         UserInfoGetRes result1 = new UserInfoGetRes();
         result1.setNm("test1");
         given(mapper.selProfileUserInfo(p1)).willReturn(result1);
 
-        UserInfoGetReq p2 = new UserInfoGetReq(3, 1);
+        UserInfoGetReq p2 = new UserInfoGetReq(3);
+        p2.setSignedUserId(1);
         UserInfoGetRes result2 = new UserInfoGetRes();
         result2.setNm("test2");
         given(mapper.selProfileUserInfo(p2)).willReturn(result2);

@@ -45,7 +45,7 @@ app:
 
     #AT - 만료시간(ms) - 30분
     #access-token-expiry: 1_800_000
-    access-token-expiry: 60_000
+    access-token-expiry: 30_000
 
     #RT - 만료시간(ms) - 15일
     refresh-token-expiry: 1_296_000_000

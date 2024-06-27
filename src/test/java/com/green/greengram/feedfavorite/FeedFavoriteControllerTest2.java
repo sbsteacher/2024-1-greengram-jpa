@@ -55,7 +55,8 @@ class FeedFavoriteControllerTest2 {
     @Test
     void toggleReq() throws Exception {
         //given
-        FeedFavoriteReq p = new FeedFavoriteReq(1, 2);
+        FeedFavoriteReq p = new FeedFavoriteReq(1);
+        p.setUserId(2);
         int resultData = 1;
         Map<String, Object> result = new HashMap();
         result.put("statusCode", HttpStatus.OK);
@@ -82,7 +83,8 @@ class FeedFavoriteControllerTest2 {
     void toggleReq3() throws Exception {
         //resultMsg값이 "좋아요 취소"가 리턴이 되는지 확인
 
-        FeedFavoriteReq p = new FeedFavoriteReq(3, 5);
+        FeedFavoriteReq p = new FeedFavoriteReq(3);
+        p.setUserId(2);
         int resultData = 0;
         Map<String, Object> result = new HashMap();
         result.put("statusCode", HttpStatus.OK);

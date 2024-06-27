@@ -28,10 +28,12 @@ class UserFollowMapperTest {
     @Test
     @DisplayName("유저 팔로우 insert 테스트")
     void insUserFollow() {
-        UserFollowReq p1 = new UserFollowReq(0, 0);
+        UserFollowReq p1 = new UserFollowReq(0);
+        p1.setFromUserId(0);
         List<UserFollowEntity> list1 = mapper.selUserFollowListForTest(p1);
 
-        UserFollowReq p2 = new UserFollowReq(4, 5);
+        UserFollowReq p2 = new UserFollowReq(4);
+        p2.setFromUserId(5);
         int affrectedRows = mapper.insUserFollow(p2);
         assertEquals(1, affrectedRows);
 
@@ -46,7 +48,8 @@ class UserFollowMapperTest {
         assertEquals(p2.getToUserId(), list3.get(0).getToUserId());
 
 
-        UserFollowReq p3 = new UserFollowReq(5, 1);
+        UserFollowReq p3 = new UserFollowReq(5);
+        p3.setFromUserId(1);
         int affrectedRows2 = mapper.insUserFollow(p3);
         assertEquals(1, affrectedRows2);
         List<UserFollowEntity> list4 = mapper.selUserFollowListForTest(p1);
@@ -61,7 +64,8 @@ class UserFollowMapperTest {
     void selUserFollowListForTest() {
 
         //1. 전체 레코드 테스트
-        UserFollowReq p1 = new UserFollowReq(0, 0);
+        UserFollowReq p1 = new UserFollowReq(0);
+        p1.setFromUserId(0);
         List<UserFollowEntity> list1 = mapper.selUserFollowListForTest(p1);
         assertEquals(RECORD_COUNT, list1.size(), "1. 레코드 수가 다르다.");
 
@@ -74,7 +78,8 @@ class UserFollowMapperTest {
 
 
         //2. fromUserId = 1
-        UserFollowReq p2 = new UserFollowReq(1, 0);
+        UserFollowReq p2 = new UserFollowReq(1);
+        p2.setFromUserId(0);
         List<UserFollowEntity> list2 = mapper.selUserFollowListForTest(p2);
         assertEquals(4, list2.size(), "2. 레코드 수가 다르다");
         assertEquals(new UserFollowEntity(1, 2, "2024-05-21 09:57:01")
@@ -83,13 +88,15 @@ class UserFollowMapperTest {
                 , list1.get(1), "2. 1번 레코드 값이 다름");
 
         //3. fromUserId = 300
-        UserFollowReq p3 = new UserFollowReq(300, 0);
+        UserFollowReq p3 = new UserFollowReq(300);
+        p3.setFromUserId(0);
         List<UserFollowEntity> list3 = mapper.selUserFollowListForTest(p3);
         assertEquals(0, list3.size(), "3. 레코드가 넘어오면 안 됨");
 
 
         //4. toUserId = 1
-        UserFollowReq p4 = new UserFollowReq(0, 1);
+        UserFollowReq p4 = new UserFollowReq(0);
+        p4.setFromUserId(1);
         List<UserFollowEntity> list4 = mapper.selUserFollowListForTest(p4);
         assertEquals(2, list4.size(), "4. 레코드 수가 다르다");
         assertEquals(new UserFollowEntity(2, 1, "2024-05-21 09:57:05")
@@ -105,17 +112,20 @@ class UserFollowMapperTest {
 
     @Test
     void delUserFollowYou() {
-        UserFollowReq countParam = new UserFollowReq(0, 0);
+        UserFollowReq countParam = new UserFollowReq(0);
+        countParam.setFromUserId(0);
         List<UserFollowEntity> totalList1 = mapper.selUserFollowListForTest(countParam);
         int recordCountOrigin = totalList1.size();
 
         //없는 pk 삭제
-        UserFollowReq p2 = new UserFollowReq(10, 20);
+        UserFollowReq p2 = new UserFollowReq(10);
+        p2.setFromUserId(20);
         int affectedRows2 = mapper.delUserFollow(p2);
         assertEquals(0, affectedRows2, "삭제가 되면 안되나 삭제가 되었음");
 
         //1, 2 삭제
-        UserFollowReq p3 = new UserFollowReq(1, 2);
+        UserFollowReq p3 = new UserFollowReq(1);
+        p3.setFromUserId(2);
         List<UserFollowEntity> p3List = mapper.selUserFollowListForTest(p3);
         assertEquals(1, p3List.size());
 
@@ -132,17 +142,20 @@ class UserFollowMapperTest {
 
     @Test
     void delUserFollowYou2() {
-        UserFollowReq countParam = new UserFollowReq(0, 0);
+        UserFollowReq countParam = new UserFollowReq(0);
+        countParam.setFromUserId(0);
         List<UserFollowEntity> totalList1 = mapper.selUserFollowListForTest(countParam);
         int recordCountOrigin = totalList1.size();
 
         //없는 pk 삭제
-        UserFollowReq p2 = new UserFollowReq(12, 22);
+        UserFollowReq p2 = new UserFollowReq(12);
+        p2.setFromUserId(22);
         int affectedRows2 = mapper.delUserFollow(p2);
         assertEquals(0, affectedRows2, "삭제가 되면 안되나 삭제가 되었음");
 
         //1, 2 삭제
-        UserFollowReq p3 = new UserFollowReq(2, 3);
+        UserFollowReq p3 = new UserFollowReq(2);
+        p2.setFromUserId(3);
         List<UserFollowEntity> p3List = mapper.selUserFollowListForTest(p3);
         assertEquals(1, p3List.size());
 
