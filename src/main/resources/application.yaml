@@ -1,12 +1,14 @@
 spring:
+  config:
+    import: optional:file:.env
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: ${DEFAULT.DB_URL}
+    username: ${DEFAULT.DB_USERNAME}
+    password: ${DEFAULT.DB_PASSWORD}
   jackson:
     deserialization:
       fail-on-unknown-properties: false
-  datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mariadb://localhost:3306/greengram2024_tdd
-    username: root
-    password: green502
 
   servlet:
     multipart:
@@ -29,13 +31,14 @@ springdoc:
     disabled: true
 
 file:
-  directory: D:\2024-01\download\greengram_tdd
+  directory: ${DEFAULT.FILE_DIRECTORY}
 
 # custom 속성 지정
 app:
   jwt:
     # JWT만들 때 사용하는 열쇠(암호화) > 나중에 복호화 할때도 사용
-    secret: DaeguGreenArtAcademyClass502RoomForJavaSpringBootFightingD23sdfsdf23FDSADFSDFDass502RoomForJavaSprinass502RoomForJavaSprin
+    #secret: DaeguGreenArtAcademyClass502RoomForJavaSpringBootFightingD23sdfsdf23FDSADFSDFDass502RoomForJavaSprinass502RoomForJavaSprin
+    secret: ${JWT_SECRET}
 
     #front-back 간 JWT받는 헤더 키 이름
     header-schema-name: authorization
@@ -57,7 +60,7 @@ spring:
     activate:
       on-profile: tdd
   datasource:
-    url: jdbc:log4jdbc:mariadb://localhost:3306/greengram2024_tdd_test
+    url: ${TDD.DB_URL}
   sql:
     init:
       mode: always
@@ -71,12 +74,12 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:log4jdbc:mariadb://192.168.0.144:3306/db_odd_first_5
-    username: odd_first_5
-    password: intel
+    url: ${PROD.DB_URL}
+    username: ${PROD.DB_USERNAME}
+    password: ${PROD.DB_PASSWORD}
 
 file:
-  directory: /home/download
+  directory: ${PROD.FILE_DIRECTORY}
 
 
 

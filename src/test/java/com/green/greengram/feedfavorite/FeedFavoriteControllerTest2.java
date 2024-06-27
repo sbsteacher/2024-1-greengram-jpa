@@ -69,7 +69,8 @@ class FeedFavoriteControllerTest2 {
 
     @Test
     void toggleReq2() throws Exception {
-        FeedFavoriteReq p = new FeedFavoriteReq(2, 4);
+        FeedFavoriteReq p = new FeedFavoriteReq(2);
+        p.setUserId(4);
         int resultData = 2;
         Map<String, Object> result = new HashMap();
         result.put("statusCode", HttpStatus.OK);
