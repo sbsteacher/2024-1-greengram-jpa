@@ -70,6 +70,10 @@ public class SecurityConfiguration {
                                         , "/profile/*"
                                         , "/feed"
 
+                                        //actuator
+                                        , "/actuator"
+                                        , "/actuator/*"
+
                                 ).permitAll()
                             .anyRequest().authenticated() //로그인이 되어 있어야만 허용
                 )

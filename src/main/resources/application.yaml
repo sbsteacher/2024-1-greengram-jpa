@@ -56,6 +56,31 @@ app:
     #RT - 만료시간(ms) - 15일
     refresh-token-expiry: 1_296_000_000
 
+management:
+  endpoint: #엔드포인트 (URL)
+    health:
+      show-details: always #/actuator/health의 디테일한 정보를 표시
+    shutdown:
+      enabled: true
+
+  endpoints: #전체 엔드포인트 세팅
+    web:
+      exposure:
+        include: "*" #actuator의 모든 엔드포인트를 웹에 노출
+  info: #엔드포인트이지만 endpoint아래에 있지 않고, management아래에 위치
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
+
+  server:
+    port: 8080
+
+
+
+
 ---
 
 spring:
