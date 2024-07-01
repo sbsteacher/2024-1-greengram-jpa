@@ -8,9 +8,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -66,7 +64,7 @@ public class JwtTokenProviderV2 {
         return null;
     }
 
-    public Claims getAllClaims(String token) {
+    public Claims getClaims(String token) {
         return Jwts
                 .parser()
                 .verifyWith(secretKey) //똑같은 키로 복호화
@@ -77,7 +75,7 @@ public class JwtTokenProviderV2 {
 
     public UserDetails getUserDetailsFromToken(String token) {
         try {
-            Claims claims = getAllClaims(token); //JWT(인증코드)에 저장되어 있는 Claims를 얻어온다.
+            Claims claims = getClaims(token); //JWT(인증코드)에 저장되어 있는 Claims를 얻어온다.
             String json = (String)claims.get("signedUser"); //Claims에 저장되어 있는 값을 얻어온다. (그것이 JSON(데이터))
             MyUser myUser = om.readValue(json, MyUser.class); //JSON > 객체로 변환 (그것이 UserDetails, 정확히는 MyUserDetails)
             MyUserDetails myUserDetails = new MyUserDetails();
@@ -107,7 +105,7 @@ public class JwtTokenProviderV2 {
     public boolean isValidateToken(String token) {
         try {
             //(original) 만료시간이 안 지났으면 리턴 false, 지났으면 리턴 true
-            return !getAllClaims(token).getExpiration().before(new Date());
+            return !getClaims(token).getExpiration().before(new Date());
             //(변환) 만료시간이 안 지났으면 리턴 true, 지났으면 리턴 false
 
         } catch (Exception e) {
@@ -133,7 +131,8 @@ public class JwtTokenProviderV2 {
         }
 
         //순수한 JWT문자열만 뽑아내기 위한 문자열 자르기 + trim(양쪽 빈칸 제거)
-        return jwt.substring(appProperties.getJwt().getTokenType().length()).trim();
+        //return jwt.substring(appProperties.getJwt().getTokenType().length()).trim();
+        return jwt.substring(appProperties.getJwt().getTokenType().length() + 1);
     }
 
 }

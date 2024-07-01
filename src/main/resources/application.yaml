@@ -53,6 +53,7 @@ app:
     #access-token-expiry: 1_800_000
     # access-token-expiry: 30_000 #30초
     access-token-expiry: 600_000 #10분
+    #access-token-expiry: 20_000 #20초
 
     #RT - 만료시간(ms) - 15일
     refresh-token-expiry: 1_296_000_000
@@ -79,9 +80,6 @@ management:
   server:
     port: 8080
 
-
-
-
 ---
 
 spring:
@@ -93,8 +91,6 @@ spring:
   sql:
     init:
       mode: always
-
-
 
 ---
 
