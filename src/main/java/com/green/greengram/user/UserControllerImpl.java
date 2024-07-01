@@ -39,6 +39,11 @@ public class UserControllerImpl {
                 .build();
     }
 
+    /*
+    FE는 단지 get방식으로 아무런 작업없이 단순히 요청만하면 refreshToken이 넘어온다.
+    이유는 우리가 refreshToken을 로그인을 성공하면 cookie에 담았기 때문
+    cookie는 요청마다 항상 넘어온다.
+     */
     @GetMapping("access-token")
     public ResultDto<Map> getAccessToken(HttpServletRequest req) {
         Map map = service.getAccessToken(req);

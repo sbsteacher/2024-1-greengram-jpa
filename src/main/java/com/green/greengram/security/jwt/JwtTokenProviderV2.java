@@ -17,6 +17,12 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+/*
+  JWT 생성
+, Request(요청)의 Header에서 token얻기
+, 확인(validate:  토큰 변질이 없었나, 만료시간 지났나?)
+, Claim(data) 넣고 빼기
+*/
 
 @Slf4j
 @Component
