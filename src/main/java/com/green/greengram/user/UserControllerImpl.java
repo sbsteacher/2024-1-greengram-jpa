@@ -45,10 +45,10 @@ public class UserControllerImpl {
     cookie는 요청마다 항상 넘어온다.
      */
     @GetMapping("access-token")
-    public ResultDto<Map> getAccessToken(HttpServletRequest req) {
+    public ResultDto<Map<String, String>> getAccessToken(HttpServletRequest req) {
         Map map = service.getAccessToken(req);
 
-        return ResultDto.<Map>builder()
+        return ResultDto.<Map<String, String>>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg("Access Token 발급")
                 .resultData(map)

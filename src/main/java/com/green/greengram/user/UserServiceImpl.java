@@ -4,6 +4,7 @@ import com.green.greengram.common.AppProperties;
 import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.CustomFileUtils;
 import com.green.greengram.security.AuthenticationFacade;
+import com.green.greengram.security.SignInProviderType;
 import com.green.greengram.security.jwt.JwtTokenProviderV2;
 import com.green.greengram.security.MyUser;
 import com.green.greengram.security.MyUserDetails;
@@ -61,7 +62,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public SignInPostRes signInPost(HttpServletResponse res, SignInPostReq p) {
-        User user = mapper.signInPost(p.getUid());
+        p.setProviderType(SignInProviderType.LOCAL.name());
+        //p.setProviderType("LOCAL");
+        User user = mapper.signInPost(p);
 
         if (user == null) {
             throw new RuntimeException("아이디를 확인해주세요.");
@@ -98,7 +101,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    public Map getAccessToken(HttpServletRequest req) {
+    public Map<String, String> getAccessToken(HttpServletRequest req) {
         Cookie cookie = cookieUtils.getCookie(req, "refresh-token");
         if(cookie == null) { // refresh-token 값이 쿠키에 존재 여부
             throw new RuntimeException();
@@ -113,8 +116,9 @@ public class UserServiceImpl implements UserService {
 
         String accessToken = jwtTokenProvider.generateAccessToken(myUser);
 
-        Map map = new HashMap();
+        Map<String, String> map = new HashMap();
         map.put("accessToken", accessToken);
+        map.get("accessToken");
         return map;
     }
 

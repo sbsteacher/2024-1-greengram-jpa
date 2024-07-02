@@ -10,7 +10,7 @@ public interface UserMapper {
      List<User> selTest(long userId);
 
      int signUpPostReq(SignUpPostReq p);
-     User signInPost(String uid);
+     User signInPost(SignInPostReq p);
      UserInfoGetRes selProfileUserInfo(UserInfoGetReq p);
      int updProfilePic(UserProfilePatchReq p);
 }

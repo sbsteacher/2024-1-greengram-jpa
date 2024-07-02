@@ -30,6 +30,7 @@
              , uid, upw, nm, pic
         FROM user
         WHERE uid = #{uid}
+        AND provider_type = #{providerType}
     </select>
 
     <select id="selProfileUserInfo">
