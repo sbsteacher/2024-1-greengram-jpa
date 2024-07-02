@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app") //prefix의 'app'은 applicationl.yaml파일의 44Line의 'app'을 의미
 public class AppProperties {
     private final Jwt jwt = new Jwt();
+    private final Oauth2 oauth2 = new Oauth2();
+
     //class명 Jwt는 application.yaml의 35Line의 'jwt'를 의미
     //멤버 필드명은 application.yaml의 app/jwt/* 속성명과 매칭
     //application.yaml에서 '-'는 멤버필드에서 카멜케이스기법과 매칭함
@@ -25,5 +27,13 @@ public class AppProperties {
             this.refreshTokenExpiry = refreshTokenExpiry;
             this.refreshTokenCookieMaxAge = (int)(refreshTokenExpiry * 0.001); // ms > s 변환
         }
+    }
+
+    @Getter
+    @Setter
+    public static class Oauth2 {
+        private String authorizationRequestCookieName;
+        private String redirectUriParamCookieName;
+        private int cookieExpirySeconds;
     }
 }

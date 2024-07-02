@@ -1,5 +1,6 @@
 package com.green.greengram.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,12 +43,30 @@ public class CookieUtils {
         return null;
     }
 
+    public <T> T getCookie (HttpServletRequest req, String name, Class<T> valueType) {
+        Cookie cookie = getCookie(req, name);
+        try {
+            return om.readValue(cookie.getValue(), valueType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void setCookie(HttpServletResponse res, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/"); //Root URL (우리 백엔드 모든 요청에 해당하게 세팅)
         cookie.setHttpOnly(true); //보안 쿠키
         cookie.setMaxAge(maxAge); //만료 시간
         res.addCookie(cookie);
+    }
+
+    //value에 객체를 넣으면 json형태로 변환해서 cookie에 저장
+    public void setCookie(HttpServletResponse res, String name, Object value, int maxAge) {
+        try {
+            this.setCookie(res, name, om.writeValueAsString(value), maxAge);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void deleteCookie(HttpServletResponse res, String name) {
