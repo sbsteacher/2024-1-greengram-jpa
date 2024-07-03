@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS `feed_pics` (
 CREATE TABLE IF NOT EXISTS `user` (
     `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
     `provider_type` VARCHAR(10) NOT NULL DEFAULT 'LOCAL',
-    `uid` varchar(20) NOT NULL,
+    `uid` varchar(50) NOT NULL,
     `upw` varchar(100) NULL,
-    `nm` varchar(20) NOT NULL,
-    `pic` varchar(70) DEFAULT NULL,
+    `nm` varchar(50) NOT NULL,
+    `pic` varchar(200) DEFAULT NULL,
     `created_at` datetime NOT NULL DEFAULT current_timestamp(),
     `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
     PRIMARY KEY (`user_id`),

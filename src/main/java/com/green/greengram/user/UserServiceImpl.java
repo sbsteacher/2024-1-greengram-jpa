@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -69,7 +68,8 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new RuntimeException("아이디를 확인해주세요.");
         }
-        if (!BCrypt.checkpw(p.getUpw(), user.getUpw())) {
+        //if (!BCrypt.checkpw(p.getUpw(), user.getUpw())) {
+        if (!passwordEncoder.matches(p.getUpw(), user.getUpw())) {
             throw new RuntimeException("비밀번호를 확인해주세요.");
         }
 

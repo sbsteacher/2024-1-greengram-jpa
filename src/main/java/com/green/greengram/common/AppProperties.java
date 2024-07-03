@@ -3,6 +3,9 @@ package com.green.greengram.common;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
+
 @Getter
 //@ConfigurationProperties: yaml에 작성되어 있는 데이터를 객체화 시켜주는 애노테이션
 @ConfigurationProperties(prefix = "app") //prefix의 'app'은 applicationl.yaml파일의 44Line의 'app'을 의미
@@ -23,6 +26,7 @@ public class AppProperties {
         private long refreshTokenExpiry;
         private int refreshTokenCookieMaxAge;
 
+
         public void setRefreshTokenExpiry(long refreshTokenExpiry) {
             this.refreshTokenExpiry = refreshTokenExpiry;
             this.refreshTokenCookieMaxAge = (int)(refreshTokenExpiry * 0.001); // ms > s 변환
@@ -35,5 +39,6 @@ public class AppProperties {
         private String authorizationRequestCookieName;
         private String redirectUriParamCookieName;
         private int cookieExpirySeconds;
+        private List<String> authorizedRedirectUris;
     }
 }

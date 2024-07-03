@@ -61,7 +61,7 @@ public class OAuth2AuthenticationRequestBasedOnCookieRepository
         return this.loadAuthorizationRequest(request);
     }
 
-    private void removeAuthorizationRequestCookies(HttpServletResponse response) {
+    public void removeAuthorizationRequestCookies(HttpServletResponse response) {
         log.info("CookieRepository - removeAuthorizationRequestCookies");
         cookieUtils.deleteCookie(response, appProperties.getOauth2().getAuthorizationRequestCookieName());
         cookieUtils.deleteCookie(response, appProperties.getOauth2().getRedirectUriParamCookieName());
