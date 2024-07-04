@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 //클래스 이름에 Factory가 들어가면 객체를 생성하는 역할
-//구글, 카카오, 네이버에서 받은 JSON Data  >  HashMap  >  규격화된 객체로 변환
+//구글, 카카오, 네이버에서 받은 JSON Data  >  HashMap  >  규격화된 객체로 변환 (데이터 가져오는 부분 통일)
 
 @Component
 public class OAuth2UserInfoFactory {

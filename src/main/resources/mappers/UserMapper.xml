@@ -16,7 +16,8 @@
 
     <insert id="signUpPostReq" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO user
-        SET uid = #{uid}
+        SET provider_type = #{providerType}
+        , uid = #{uid}
         , upw = #{upw}
         , nm = #{nm}
         , pic = #{pic}

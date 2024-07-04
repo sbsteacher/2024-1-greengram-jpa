@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     //SecurityContextHolder > Context > Authentication(UsernamePasswordAuthenticationToken) > MyUserDetails > MyUser
 
     public int signUpPostReq(MultipartFile pic, SignUpPostReq p){
+        //p.setProviderType( ???? );
         String saveFileName = customFileUtils.makeRandomFileName(pic);
 
         p.setPic(saveFileName);

@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     `created_at` datetime NOT NULL DEFAULT current_timestamp(),
     `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
     PRIMARY KEY (`user_id`),
-    UNIQUE KEY `uid` (`uid`)
+    UNIQUE KEY `uid` (`provider_type`, `uid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `user_follow` (
