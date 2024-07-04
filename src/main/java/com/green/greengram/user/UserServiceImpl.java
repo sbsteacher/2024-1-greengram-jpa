@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     //SecurityContextHolder > Context > Authentication(UsernamePasswordAuthenticationToken) > MyUserDetails > MyUser
 
     public int signUpPostReq(MultipartFile pic, SignUpPostReq p){
-        //p.setProviderType( ???? );
+        p.setProviderType( SignInProviderType.LOCAL );
         String saveFileName = customFileUtils.makeRandomFileName(pic);
 
         p.setPic(saveFileName);
@@ -91,8 +91,8 @@ public class UserServiceImpl implements UserService {
 
         //refreshToken은 보안 쿠키를 이용해서 처리(FE가 따로 작업을 하지 않아도 아래 cookie값은 항상 넘어온다.)
         int refreshTokenMaxAge = appProperties.getJwt().getRefreshTokenCookieMaxAge();
-        cookieUtils.deleteCookie(res, "refresh-token");
-        cookieUtils.setCookie(res, "refresh-token", refreshToken, refreshTokenMaxAge);
+        cookieUtils.deleteCookie(res, appProperties.getJwt().getRefreshTokenCookieName());
+        cookieUtils.setCookie(res, appProperties.getJwt().getRefreshTokenCookieName(), refreshToken, refreshTokenMaxAge);
 
         return SignInPostRes.builder()
                 .userId(user.getUserId())
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Map<String, String> getAccessToken(HttpServletRequest req) {
-        Cookie cookie = cookieUtils.getCookie(req, "refresh-token");
+        Cookie cookie = cookieUtils.getCookie(req, appProperties.getJwt().getRefreshTokenCookieName());
         if(cookie == null) { // refresh-token 값이 쿠키에 존재 여부
             throw new RuntimeException();
         }

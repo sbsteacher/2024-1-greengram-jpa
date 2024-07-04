@@ -2,6 +2,7 @@ package com.green.greengram.security.oauth2;
 
 import com.green.greengram.security.MyUser;
 import com.green.greengram.security.MyUserDetails;
+import com.green.greengram.security.MyUserOAuth2Vo;
 import com.green.greengram.security.SignInProviderType;
 import com.green.greengram.security.oauth2.userinfo.OAuth2UserInfo;
 import com.green.greengram.security.oauth2.userinfo.OAuth2UserInfoFactory;
@@ -73,17 +74,25 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
 
         if(user == null) { //회원가입 처리
             SignUpPostReq signUpParam = new SignUpPostReq();
-            signUpParam.setProviderType(signInProviderType.name());
+            signUpParam.setProviderType(signInProviderType);
             signUpParam.setUid(oAuth2UserInfo.getId());
             signUpParam.setNm(oAuth2User.getName());
             signUpParam.setPic(oAuth2UserInfo.getProfilePicUrl());
-
             int result = mapper.signUpPostReq(signUpParam);
-
+            user = new User( signUpParam.getUserId()
+                           , signInParam.getUid()
+                           , null
+                           , signUpParam.getNm()
+                           , signUpParam.getPic()
+                           , null
+                           , null );
         }
 
+        MyUserOAuth2Vo myUserOAuth2Vo
+                = new MyUserOAuth2Vo(user.getUserId(), "ROLE_USER", user.getNm(), user.getPic());
+
         MyUserDetails signInUser = new MyUserDetails();
-        signInUser.setMyUser(myUser);
+        signInUser.setMyUser(myUserOAuth2Vo);
         return signInUser;
     }
 }

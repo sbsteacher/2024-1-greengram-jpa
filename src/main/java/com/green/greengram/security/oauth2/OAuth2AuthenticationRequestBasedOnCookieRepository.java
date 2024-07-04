@@ -40,10 +40,11 @@ public class OAuth2AuthenticationRequestBasedOnCookieRepository
             return;
         }
         cookieUtils.setCookie(response
-                , appProperties.getOauth2().getRedirectUriParamCookieName()
+                , appProperties.getOauth2().getAuthorizationRequestCookieName()
                 , authorizationRequest
                 , appProperties.getOauth2().getCookieExpirySeconds());
 
+        //FE로 돌아갈 redirect 주소값 (즉, FE가 redirect_uri 파라미터로 백엔드에 보내준 값)
         String redirectUriAfterLogin = request.getParameter(appProperties.getOauth2().getRedirectUriParamCookieName());
         log.info("redirectUriAfterLogin: {}", redirectUriAfterLogin);
         if(StringUtils.isNotBlank(redirectUriAfterLogin)) {

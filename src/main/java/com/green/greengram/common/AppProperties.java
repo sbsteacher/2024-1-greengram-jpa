@@ -24,8 +24,8 @@ public class AppProperties {
         private String tokenType;
         private long accessTokenExpiry;
         private long refreshTokenExpiry;
+        private String refreshTokenCookieName;
         private int refreshTokenCookieMaxAge;
-
 
         public void setRefreshTokenExpiry(long refreshTokenExpiry) {
             this.refreshTokenExpiry = refreshTokenExpiry;
