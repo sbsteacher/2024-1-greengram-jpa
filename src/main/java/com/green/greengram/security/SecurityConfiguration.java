@@ -3,6 +3,10 @@ package com.green.greengram.security;
 import com.green.greengram.security.jwt.JwtAuthenticationAccessDeniedHandler;
 import com.green.greengram.security.jwt.JwtAuthenticationEntryPoint;
 import com.green.greengram.security.jwt.JwtAuthenticationFilter;
+import com.green.greengram.security.oauth2.MyOAuth2UserService;
+import com.green.greengram.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.green.greengram.security.oauth2.OAuth2AuthenticationRequestBasedOnCookieRepository;
+import com.green.greengram.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +23,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     //@Component로 빈등록을 하였기 때문에 DI가 된다.
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final OAuth2AuthenticationRequestBasedOnCookieRepository repository;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final MyOAuth2UserService myOAuth2UserService;
 
     /*
       메소드 빈등록으로 주로쓰는 케이스는 (현재 기준으로 설명하면) Security와 관련된
       빈등록을 여러개 하고 싶을 때 메소드 형식으로 빈등록 하면 한 곳에 모을 수가 있으니 좋다.
         메소드 빈등록으로 하지 않으면 각각 클래스로 만들어야 한다.
-
      */
 
     @Bean //메소드 타입의 빈 등록 (파라미터, 리턴타입 중요) 파라미터는 빈등록할때 필요한 객체
@@ -45,45 +52,28 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) //CSRF (CORS랑 많이 헷갈려 함)
                 //requestMatchers
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(
-                                    //회원가입, 로그인 인증이 안 되어 있더라도 사용 가능하게 세팅
-                                     "/api/user/sign-up"
-                                    ,"/api/user/sign-in"
-                                    ,"/api/user/access-token"
-
-                                    //swagger 사용할 수 있게 세팅
-                                    , "/swagger"
-                                    , "/swagger-ui/**"
-                                    , "/v3/api-docs/**"
-
-                                    //사진
-                                    , "/pic/**"
-                                    , "/fimg/**"
-
-                                    //프론트 화면 보일수 있게 세팅
-                                    ,"/"
-                                    ,"/index.html"
-                                    , "/css/**"
-                                    , "/js/**"
-                                    , "/static/**"
-
-                                    //프론트에서 사용하는 라우터 주소
-                                    , "/sign-in"
-                                    , "/sign-up"
-                                    , "/profile/*"
-                                    , "/feed"
-
-                                    //actuator
-                                    , "/actuator"
-                                    , "/actuator/*"
-
-                                ).permitAll()
-
-                            .anyRequest().authenticated() //로그인이 되어 있어야만 허용
+                    auth.requestMatchers(
+                              "/api/feed"
+                            , "/api/feed/*"
+                            , "/api/user/pic"
+                            , "/api/user/follow"
+                    )
+                    .authenticated()
+                    .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                                                          .accessDeniedHandler(new JwtAuthenticationAccessDeniedHandler())
+                )
+                .oauth2Login( oauth2 -> oauth2.authorizationEndpoint(
+                                            auth -> auth.baseUri("/oauth2/authorization")
+                                                        .authorizationRequestRepository(repository)
+
+                                        )
+                        .redirectionEndpoint( redirection -> redirection.baseUri("/*/oauth2/code/*"))
+                        .userInfoEndpoint(userInfo -> userInfo.userService(myOAuth2UserService))
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler)
                 )
 
                 /*
