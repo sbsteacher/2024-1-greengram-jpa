@@ -32,12 +32,12 @@ public class UserControllerImpl {
     @PostMapping("sign-in")
     public MyResponse<SignInPostRes> signInPost(HttpServletResponse res
             , @Valid @RequestBody SignInPostReq p) {
-        //SignInPostRes result = service.signInPost(res, p);
+        SignInPostRes result = service.signInPost(res, p);
         log.info("SignInPostReq: {}", p);
         return MyResponse.<SignInPostRes>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg("로그인 성공")
-                .resultData(null)
+                .resultData(result)
                 .build();
     }
 
