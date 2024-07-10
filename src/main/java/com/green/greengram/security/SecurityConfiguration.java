@@ -75,6 +75,29 @@ public class SecurityConfiguration {
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )
+                /*
+                OAuth2 처리 순서
+
+                OAuth2LoginAuthenticationFilter, OAuth2AuthorizationRequestRedirectFilter
+
+                FE > registration 선택
+                   > http://localhost:8080/oauth2/authorization/${registrationId}?redirect_uri=${redirectUrl} 백엔드 요청
+                     (registrationId: 플랫폼 이름,  redirectUrl: 소셜 로그인 완료 후 FE로 보내야하는 주소값
+                   > (#) registration에 요청을 보낼 정보를 정리해서 요청 객체(OAuth2AuthorizationRequest) 생성
+                   > OAuth2AuthenticationRequestBasedOnCookieRepository - saveAuthorizationRequest 메소드 호출
+                     (쿠키에 요청 정보, FE Redirect URL 저장 > 쿠키사용은 플랫폼과 통신을 여러번 하는동안 데이터 유지에 사용)
+                   > OAuth2AuthenticationRequestBasedOnCookieRepository - removeAuthorizationRequest 메소드 호출
+                   > OAuth2AuthenticationRequestBasedOnCookieRepository - loadAuthorizationRequest 메소드 호출
+                   (Access Token 받음)
+                   > OAuth2UserService - loadUser
+
+                   ( 사용자 정보 받았다 / 못 받았다 분기)
+                   받았다 > OAuth2AuthenticationSuccessHandler - onAuthenticationSuccess 호출
+                   못 받았다 >
+                 */
+
+
+
 
                 /*
                 //만약, permitAll메소드가 void였다면 아래와 같이 작성을 해야함

@@ -16,9 +16,10 @@ import java.util.Map;
 @NoArgsConstructor
 @Setter
 @Getter
+//시큐리티에서 로그인 처리를 할 때 사용하는 객체
 public class MyUserDetails implements UserDetails, OAuth2User {
 
-    private MyUser myUser;
+    private MyUser myUser; //JWT 만들 때 payload에 담을 데이터를 담은 객체
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -41,7 +42,7 @@ public class MyUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return null;
+        return myUser == null ? "GUEST" : String.valueOf(myUser.getUserId());
     }
 
     @Override

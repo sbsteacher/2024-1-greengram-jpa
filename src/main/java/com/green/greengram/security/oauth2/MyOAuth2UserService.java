@@ -76,18 +76,21 @@ public class MyOAuth2UserService extends DefaultOAuth2UserService {
             SignUpPostReq signUpParam = new SignUpPostReq();
             signUpParam.setProviderType(signInProviderType);
             signUpParam.setUid(oAuth2UserInfo.getId());
-            signUpParam.setNm(oAuth2User.getName());
+            signUpParam.setNm(oAuth2UserInfo.getName());
             signUpParam.setPic(oAuth2UserInfo.getProfilePicUrl());
             int result = mapper.signUpPostReq(signUpParam);
             user = new User( signUpParam.getUserId()
-                           , signInParam.getUid()
+                           , null
                            , null
                            , signUpParam.getNm()
                            , signUpParam.getPic()
                            , null
                            , null );
+        } else { //이미 회원가입 되어 있었음
+            if(user.getPic() == null || (user.getPic().startsWith("http") && !user.getPic().equals(oAuth2UserInfo.getProfilePicUrl()))) { //프로필 값이 변경이 되었다면
+                //프로필 사진 변경처리(update)
+            }
         }
-
         MyUserOAuth2Vo myUserOAuth2Vo
                 = new MyUserOAuth2Vo(user.getUserId(), "ROLE_USER", user.getNm(), user.getPic());
 

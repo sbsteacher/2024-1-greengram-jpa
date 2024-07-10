@@ -2,7 +2,7 @@ package com.green.greengram.userfollow;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.greengram.CharEncodingConfiguration;
-import com.green.greengram.common.model.ResultDto;
+import com.green.greengram.common.model.MyResponse;
 import com.green.greengram.userfollow.model.UserFollowReq;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +42,7 @@ class UserFollowControllerTest {
         given(service.postUserFollow(p)).willReturn(resultData);
         String json = om.writeValueAsString(p);
 
-        ResultDto<Integer> expectedResult = ResultDto.<Integer>builder()
+        MyResponse<Integer> expectedResult = MyResponse.<Integer>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg(HttpStatus.OK.toString())
                 .resultData(resultData)
@@ -78,7 +78,7 @@ class UserFollowControllerTest {
         given(service.postUserFollow(p)).willReturn(resultData);
         String json = om.writeValueAsString(p);
 
-        ResultDto<Integer> expectedResult = ResultDto.<Integer>builder()
+        MyResponse<Integer> expectedResult = MyResponse.<Integer>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg(HttpStatus.OK.toString())
                 .resultData(resultData)
@@ -115,7 +115,7 @@ class UserFollowControllerTest {
         params.add("from_user_id", String.valueOf(p.getFromUserId()));
         params.add("to_user_id", String.valueOf(p.getToUserId()));
 
-        ResultDto<Integer> expectedResult = ResultDto.<Integer>builder()
+        MyResponse<Integer> expectedResult = MyResponse.<Integer>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg(HttpStatus.OK.toString())
                 .resultData(resultData)

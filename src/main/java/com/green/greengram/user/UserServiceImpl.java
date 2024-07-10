@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
         cookieUtils.setCookie(res, appProperties.getJwt().getRefreshTokenCookieName(), refreshToken, refreshTokenMaxAge);
 
         return SignInPostRes.builder()
-                .userId(user.getUserId())
+                .userId(user.getUserId()) //프로필 사진 띄울때 사용 (프로필 사진 주소에 pk값이 포함됨)
                 .nm(user.getNm())
                 .pic(user.getPic())
                 .accessToken(accessToken)

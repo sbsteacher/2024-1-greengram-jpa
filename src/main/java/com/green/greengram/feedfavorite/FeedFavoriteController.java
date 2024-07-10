@@ -1,8 +1,8 @@
 package com.green.greengram.feedfavorite;
 
-import com.green.greengram.common.model.ResultDto;
+import com.green.greengram.common.model.MyResponse;
 import com.green.greengram.feedfavorite.model.FeedFavoriteReq;
 
 public interface FeedFavoriteController {
-    ResultDto<Integer> toggleReq(FeedFavoriteReq p);
+    MyResponse<Integer> toggleReq(FeedFavoriteReq p);
 }
