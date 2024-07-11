@@ -156,9 +156,10 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: ${PROD.DB_URL}
-    username: ${PROD.DB_USERNAME}
-    password: ${PROD.DB_PASSWORD}
+    url: jdbc:mariadb://192.168.0.144:3306/db_odd_second_5
+    username: odd_second_5
+    password: fines
+    driver-class-name: org.mariadb.jdbc.Driver
 
 file:
   directory: ${PROD.FILE_DIRECTORY}

@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,7 +28,7 @@ public class SecurityConfiguration {
     private final OAuth2AuthenticationRequestBasedOnCookieRepository repository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final MyOAuth2UserService myOAuth2UserService;
-
+    private final AuthenticationEntryPoint authenticationEntryPoint;
     /*
       메소드 빈등록으로 주로쓰는 케이스는 (현재 기준으로 설명하면) Security와 관련된
       빈등록을 여러개 하고 싶을 때 메소드 형식으로 빈등록 하면 한 곳에 모을 수가 있으니 좋다.
@@ -62,7 +63,7 @@ public class SecurityConfiguration {
                     .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint)
                                                          .accessDeniedHandler(new JwtAuthenticationAccessDeniedHandler())
                 )
                 .oauth2Login( oauth2 -> oauth2.authorizationEndpoint(

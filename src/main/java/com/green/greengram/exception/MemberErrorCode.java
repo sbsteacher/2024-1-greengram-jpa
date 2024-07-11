@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 public enum MemberErrorCode implements ErrorCode {
     INCORRECT_ID_PW(HttpStatus.BAD_REQUEST, "아이디, 비밀번호를 확인해 주세요."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),
-    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다.");
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+    UNAUTHENTICATED(HttpStatus.UNAUTHORIZED, "로그인을 해주세요."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

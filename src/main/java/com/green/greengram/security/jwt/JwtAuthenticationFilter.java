@@ -1,5 +1,7 @@
 package com.green.greengram.security.jwt;
 
+import com.green.greengram.exception.CustomException;
+import com.green.greengram.exception.MemberErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.lang.reflect.Member;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,6 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 //SecurityContextHolder.getContext()에 Authentication 객체 주소값을 담으면 인증(로그인)되었다고 인식
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
+        } else {
+            request.setAttribute("exception", new CustomException(MemberErrorCode.UNAUTHENTICATED));
         }
 
         filterChain.doFilter(request, response);
