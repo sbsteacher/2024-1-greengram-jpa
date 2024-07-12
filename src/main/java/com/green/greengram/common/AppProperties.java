@@ -36,6 +36,7 @@ public class AppProperties {
     @Getter
     @Setter
     public static class Oauth2 {
+        private String baseUri;
         private String authorizationRequestCookieName;
         private String redirectUriParamCookieName;
         private int cookieExpirySeconds;

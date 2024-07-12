@@ -5,7 +5,7 @@ spring:
     #.env: 파일명
     import: optional:file:.env
   datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    driver-class-name: ${DEFAULT.DB_DRIVE_CLASS_NAME}
     url: ${DEFAULT.DB_URL} #.env 파일의 변수사용 ${변수명}
     username: ${DEFAULT.DB_USERNAME}
     password: ${DEFAULT.DB_PASSWORD}
@@ -106,10 +106,11 @@ app:
     refresh-token-cookie-name: refresh-token
     refresh-token-expiry: 1_296_000_000
   oauth2:
+    base-uri: /oauth2/authorization
     authorization-request-cookie-name: oauth2_auth_request
     redirect-uri-param-cookie-name: redirect_uri
     cookie-expiry-seconds: 180
-    authorized-redirect-uris:
+    authorized-redirect-uris: #OAuth2 처리시 허용한 FE리다이렉트 주소값
       - http://localhost:3000/oauth/redirect
       - http://localhost:8080/oauth/redirect
       - http://192.168.0.144:5125/oauth/redirect #내부 도커서버 IP
@@ -156,10 +157,9 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:mariadb://192.168.0.144:3306/db_odd_second_5
-    username: odd_second_5
-    password: fines
-    driver-class-name: org.mariadb.jdbc.Driver
+    url: ${PROD.DB_URL}
+    username: ${PROD.DB_USERNAME}
+    password: ${PROD.DB_PASSWORD}
 
 file:
   directory: ${PROD.FILE_DIRECTORY}

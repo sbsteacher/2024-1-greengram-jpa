@@ -7,9 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.util.SerializationUtils;
 
+
+import java.io.Serializable;
 import java.util.Base64;
 
 @Slf4j
@@ -59,7 +61,7 @@ public class CookieUtils {
 
     public String serialize(Object obj) { //객체가 가지고 있는 데이터를 문자열로 변환(암호화)
                                                       // Object > byte[] > String
-        return Base64.getUrlEncoder().encodeToString( SerializationUtils.serialize(obj) );
+        return Base64.getUrlEncoder().encodeToString( org.springframework.util.SerializationUtils.serialize(obj) );
     }
 
     public <T> T deserialize(Cookie cookie, Class<T> cls) { // 복호화
