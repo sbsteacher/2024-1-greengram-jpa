@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
+@Setter
 @EqualsAndHashCode
 public class User {
     private long userId;

@@ -82,7 +82,7 @@ public class OAuth2AuthenticationSuccessHandler
         //JWT를 만들기 위해 MyUser 객체화
         MyUser myUser = MyUser.builder()
                 .userId(myUserOAuth2Vo.getUserId())
-                .role(myUserOAuth2Vo.getRole())
+                .roles(myUserOAuth2Vo.getRoles())
                 .build();
 
         String accessToken = jwtTokenProvider.generateAccessToken(myUser);

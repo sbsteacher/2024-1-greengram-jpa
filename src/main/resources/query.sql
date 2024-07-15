@@ -59,3 +59,25 @@ CREATE TABLE IF NOT EXISTS `user_follow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+DROP TABLE user_roles;
+CREATE TABLE user_roles(
+      user_id BIGINT NOT NULL
+    , role_cd INT NOT NULL -- 코드값
+    , role VARCHAR(20) -- 코드값과 연결된 문자열
+    , PRIMARY KEY (user_id, role_cd)
+);
+
+DROP TABLE main_code;
+CREATE TABLE main_code(
+      main_code_id INT PRIMARY KEY auto_increment
+    , cd_name VARCHAR(20) NOT NULL-- role_cd 이러한 코드의 코드
+    , description VARCHAR(30) -- 코드에 대한 설명
+);
+DROP TABLE sub_code;
+CREATE TABLE sub_code(
+      sub_code_id INT PRIMARY KEY auto_increment
+    , main_code_id INT NOT NULL
+    , val VARCHAR(30) NOT NULL-- 코드의 문자열
+    , description VARCHAR(30)
+    , FOREIGN KEY (main_code_id) REFERENCES main_code(main_code_id)
+);

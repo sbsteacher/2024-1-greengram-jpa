@@ -25,13 +25,16 @@
     </insert>
 
     <select id="signInPost">
-        SELECT user_id AS userId
-             , created_at AS createdAt
-             , updated_at AS updatedAt
-             , uid, upw, nm, pic
-        FROM user
-        WHERE uid = #{uid}
-        AND provider_type = #{providerType}
+        SELECT A.user_id AS userId
+             , A.created_at AS createdAt
+             , A.updated_at AS updatedAt
+             , A.uid, A.upw, A.nm, A.pic
+             , B.role
+          FROM user A
+          LEFT JOIN user_roles B
+            ON A.user_id = B.user_id
+         WHERE A.uid = #{uid}
+           AND A.provider_type = #{providerType}
     </select>
 
     <select id="selProfileUserInfo">
