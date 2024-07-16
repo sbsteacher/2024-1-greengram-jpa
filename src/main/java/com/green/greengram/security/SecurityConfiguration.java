@@ -54,14 +54,25 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable()) //CSRF (CORS랑 많이 헷갈려 함)
                 //requestMatchers
                 .authorizeHttpRequests(auth ->
-                    auth.requestMatchers(
-                              "/api/feed"
-                            , "/api/feed/*"
-                            , "/api/user/pic"
-                            , "/api/user/follow"
-                    )
-                    .authenticated()
-                    .anyRequest().permitAll()
+                    auth
+                            .requestMatchers("/api/feed")
+                            .authenticated()
+
+                            .requestMatchers(
+                                  "/api/feed/*"
+                                , "/api/user/pic"
+                                , "/api/user/follow"
+                            )
+                            .hasAnyRole("USER")
+
+                            .requestMatchers(
+                                  "/api/admin"
+                                , "/api/admin/**"
+                            )
+                            .hasAnyRole("ADMIN", "ADMINISTRATOR")
+
+                            .anyRequest()
+                            .permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint)

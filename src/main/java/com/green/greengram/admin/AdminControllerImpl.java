@@ -18,7 +18,7 @@ import java.util.List;
 public class AdminControllerImpl {
     private final AdminServiceImpl service;
 
-    @GetMapping
+    @GetMapping("provider-count")
     public MyResponse<List<GroupByProviderCountRes>> getGroupByProviderCount() {
         List<GroupByProviderCountRes> list = service.getGroupByProviderCount();
 
