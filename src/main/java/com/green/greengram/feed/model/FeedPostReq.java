@@ -13,6 +13,8 @@ public class FeedPostReq {
     @JsonIgnore
     private long feedId;
 
+
+
     @JsonIgnore
     private long userId;
     private String contents;

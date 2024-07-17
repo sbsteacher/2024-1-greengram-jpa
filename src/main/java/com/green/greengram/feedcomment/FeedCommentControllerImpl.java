@@ -7,6 +7,7 @@ import com.green.greengram.feedcomment.model.FeedCommentGetRes;
 import com.green.greengram.feedcomment.model.FeedCommentPostReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/feed/comment")
 public class FeedCommentControllerImpl implements FeedCommentController {
-    private final FeedCommentService service;
+    @Autowired
+    private FeedCommentService service;
 
     @PostMapping
     public MyResponse<Long> postFeedComment(@RequestBody FeedCommentPostReq p) {
