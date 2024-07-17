@@ -4,6 +4,7 @@ import com.green.greengram.common.AppProperties;
 import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.CustomFileUtils;
 import com.green.greengram.common.MyCommonUtils;
+import com.green.greengram.entity.User;
 import com.green.greengram.exception.CustomException;
 import com.green.greengram.exception.MemberErrorCode;
 import com.green.greengram.security.AuthenticationFacade;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final CookieUtils cookieUtils;
     private final AuthenticationFacade authenticationFacade;
     private final AppProperties appProperties;
+    private final UserRepository repository;
 
     //SecurityContextHolder > Context > Authentication(UsernamePasswordAuthenticationToken) > MyUserDetails > MyUser
 
@@ -49,9 +51,18 @@ public class UserServiceImpl implements UserService {
         String password = passwordEncoder.encode(p.getUpw());
         //String password = BCrypt.hashpw(p.getUpw(),BCrypt.gensalt());
         p.setUpw(password);
-        int result = mapper.signUpPostReq(p);
+
+        User user = new User(); //User 엔터티 직접 객체 생성 (영속성이 없는 상태)
+        user.setProviderType(SignInProviderType.LOCAL);
+        user.setUid(p.getUid());
+        user.setUpw(password);
+        user.setNm(p.getNm());
+        user.setPic(saveFileName);
+
+        repository.save(user);
+        //int result = mapper.signUpPostReq(p);
         if(pic == null){
-            return result;
+            return 1;
         }
         try{
             String path = String.format("user/%d", p.getUserId());
@@ -62,7 +73,7 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             throw new RuntimeException("실패");
         }
-        return result;
+        return 1;
     }
 
     public SignInPostRes signInPost(HttpServletResponse res, SignInPostReq p) {

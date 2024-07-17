@@ -20,11 +20,11 @@ public class UserFollow extends CreatedAt {
     private Long userFollowId;
 
     @ManyToOne //Many(UserFolow) To One(User)
-    @JoinColumn(name = "from_user_id") //조인 컬럼명 (컬럼명이 됨)
+    @JoinColumn(name = "from_user_id", nullable = false) //조인 컬럼명 (컬럼명이 됨)
     private User fromUser;
 
     @ManyToOne
-    @JoinColumn(name = "to_user_id")
+    @JoinColumn(name = "to_user_id", nullable = false)
     private User toUser;
 
 }

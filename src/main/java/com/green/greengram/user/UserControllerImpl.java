@@ -22,7 +22,7 @@ public class UserControllerImpl {
     private final UserServiceImpl service;
 
     @PostMapping("sign-up")
-    public MyResponse<Integer> signUpPostReq(@RequestPart MultipartFile pic, @RequestPart SignUpPostReq p){
+    public MyResponse<Integer> signUpPostReq(@RequestPart(required = false) MultipartFile pic, @RequestPart SignUpPostReq p){
         int result = service.signUpPostReq(pic, p);
         return MyResponse.<Integer>builder()
                 .resultMsg("회원가입 성공")

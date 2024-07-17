@@ -2,12 +2,16 @@ package com.green.greengram.entity;
 
 import com.green.greengram.security.SignInProviderType;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
 @Entity //이 클래스는 entity(테이블)이다.
+@Getter
+@Setter
 public class User extends UpdatedAt {
 
     @Id
@@ -25,7 +29,7 @@ public class User extends UpdatedAt {
     private String upw;
     @Column(length = 50, nullable = false)
     private String nm;
-    @Column(length = 200, nullable = false)
+    @Column(length = 200)
     private String pic;
 
 }
