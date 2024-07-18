@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
-@MappedSuperclass //부모클래스랑 맵핑 가능하게
+@MappedSuperclass //부모클래스랑 맵핑 가능하게 (상속으로 사용가능하게)
 @EntityListeners(AuditingEntityListener.class) //auditing 이벤트 바인딩
 public class CreatedAt {
 
