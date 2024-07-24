@@ -5,6 +5,7 @@ import com.green.greengram.common.CookieUtils;
 import com.green.greengram.common.CustomFileUtils;
 import com.green.greengram.common.MyCommonUtils;
 import com.green.greengram.entity.User;
+import com.green.greengram.entity.UserRole;
 import com.green.greengram.exception.CustomException;
 import com.green.greengram.exception.MemberErrorCode;
 import com.green.greengram.security.AuthenticationFacade;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationFacade authenticationFacade;
     private final AppProperties appProperties;
     private final UserRepository repository;
+    private final UserRoleRepository userRoleRepository;
 
     //SecurityContextHolder > Context > Authentication(UsernamePasswordAuthenticationToken) > MyUserDetails > MyUser
 
@@ -79,17 +82,23 @@ public class UserServiceImpl implements UserService {
     public SignInPostRes signInPost(HttpServletResponse res, SignInPostReq p) {
         p.setProviderType(SignInProviderType.LOCAL.name());
         //p.setProviderType("LOCAL");
-        List<UserInfo> userInfoList = mapper.signInPost(p);
-
-        UserInfoRoles userInfoRoles = MyCommonUtils.convertToUserInfoRoles(userInfoList);
-
-        if (userInfoRoles == null || !passwordEncoder.matches(p.getUpw(), userInfoRoles.getUpw())) {
+        //1. 내가 시도하는 select 2번
+        User user = repository.findUserByProviderTypeAndUid(SignInProviderType.LOCAL, p.getUid());
+        if(user == null || !passwordEncoder.matches(p.getUpw(), user.getUpw())) { //아이디가 없거나 비밀번호가 다르거나
             throw new CustomException(MemberErrorCode.INCORRECT_ID_PW);
         }
+        List<UserRole> userRoleList = userRoleRepository.findAllByUserId(user.getUserId());
+        List<String> roles = new ArrayList();
+        for(UserRole userRole : userRoleList) {
+            roles.add(userRole.getRole());
+        }
+
+        //2. 내가 시도하는 select 1번
+
 
         MyUser myUser = MyUser.builder()
-                .userId(userInfoRoles.getUserId())
-                .roles(userInfoRoles.getRoles())
+                .userId(user.getUserId())
+                .roles(roles)
                 .build();
         /*
         access, refresh token에 myUser(유저pk, 권한정보)를 담는다.
@@ -108,9 +117,9 @@ public class UserServiceImpl implements UserService {
         cookieUtils.setCookie(res, appProperties.getJwt().getRefreshTokenCookieName(), refreshToken, refreshTokenMaxAge);
 
         return SignInPostRes.builder()
-                .userId(userInfoRoles.getUserId()) //프로필 사진 띄울때 사용 (프로필 사진 주소에 pk값이 포함됨)
-                .nm(userInfoRoles.getNm())
-                .pic(userInfoRoles.getPic())
+                .userId(user.getUserId()) //프로필 사진 띄울때 사용 (프로필 사진 주소에 pk값이 포함됨)
+                .nm(user.getNm())
+                .pic(user.getPic())
                 .accessToken(accessToken)
                 .build();
     }
