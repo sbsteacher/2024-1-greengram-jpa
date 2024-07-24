@@ -80,14 +80,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public SignInPostRes signInPost(HttpServletResponse res, SignInPostReq p) {
-        p.setProviderType(SignInProviderType.LOCAL.name());
+        //p.setProviderType(SignInProviderType.LOCAL.name());
         //p.setProviderType("LOCAL");
         //1. 내가 시도하는 select 2번
         User user = repository.findUserByProviderTypeAndUid(SignInProviderType.LOCAL, p.getUid());
         if(user == null || !passwordEncoder.matches(p.getUpw(), user.getUpw())) { //아이디가 없거나 비밀번호가 다르거나
             throw new CustomException(MemberErrorCode.INCORRECT_ID_PW);
         }
-        List<UserRole> userRoleList = userRoleRepository.findAllByUserId(user.getUserId());
+        List<UserRole> userRoleList = userRoleRepository.findAllByUser(user);
         List<String> roles = new ArrayList();
         for(UserRole userRole : userRoleList) {
             roles.add(userRole.getRole());

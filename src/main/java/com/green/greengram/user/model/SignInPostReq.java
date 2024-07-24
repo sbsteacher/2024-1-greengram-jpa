@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class SignInPostReq {
     @NotBlank(message = "아이디를 확인해 주세요.")
-    @Schema(example = "mic", description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(example = "user_1", description = "유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     private String uid;
 
     @NotBlank(message = "비밀번호를 확인해 주세요.")
