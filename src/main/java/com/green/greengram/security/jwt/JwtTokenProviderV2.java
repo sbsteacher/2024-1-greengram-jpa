@@ -96,8 +96,18 @@ public class JwtTokenProviderV2 {
     //SpringContextHolder에 저장할 자료를 세팅(나중에 Service단에서 빼서 쓸 값, 로그인 처리, 인가 처리를 위해)
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = getUserDetailsFromToken(token); //MyUserDetails 객체주소값
+
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails
+                , null
+                , userDetails.getAuthorities()
+        );
+        MyUserDetails objUserDetails = (MyUserDetails)auth.getPrincipal();
+        objUserDetails.getMyUser().getUserId();
+
         return userDetails == null
                 ? null
+                                                          //1.데이터, 2.비밀번호(null), 3.인가 정보
                 : new UsernamePasswordAuthenticationToken(userDetails
                         , null
                         , userDetails.getAuthorities()

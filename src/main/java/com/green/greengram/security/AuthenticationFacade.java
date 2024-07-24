@@ -14,7 +14,7 @@ public class AuthenticationFacade {
 
     public MyUser getLoginUser() {
         MyUserDetails myUserDetails = (MyUserDetails)SecurityContextHolder.getContext()
-                                                                          .getAuthentication()
+                                                                          .getAuthentication() //UsernamePasswordAuthenticationToken 객체 주소값 리턴
                                                                           .getPrincipal();
         return myUserDetails == null ? null : myUserDetails.getMyUser();
     }
