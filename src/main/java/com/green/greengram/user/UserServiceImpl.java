@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     //SecurityContextHolder > Context > Authentication(UsernamePasswordAuthenticationToken) > MyUserDetails > MyUser
 
     public int signUpPostReq(MultipartFile pic, SignUpPostReq p){
-        p.setProviderType( SignInProviderType.LOCAL );
+        //p.setProviderType( SignInProviderType.LOCAL );
         String saveFileName = customFileUtils.makeRandomFileName(pic);
 
         p.setPic(saveFileName);
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
             return 1;
         }
         try{
-            String path = String.format("user/%d", p.getUserId());
+            String path = String.format("user/%d", user.getUserId());
             customFileUtils.makeFolders(path);
             String target = String.format("%s/%s", path, saveFileName);
             customFileUtils.transferTo(pic, target);
@@ -156,16 +156,19 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public String patchProfilePic(UserProfilePatchReq p) {
-        p.setSignedUserId(authenticationFacade.getLoginUserId());
+        long signedUserId = authenticationFacade.getLoginUserId();
+        //p.setSignedUserId(authenticationFacade.getLoginUserId());
         String fileNm = customFileUtils.makeRandomFileName(p.getPic());
         log.info("saveFileName: {}", fileNm);
         p.setPicName(fileNm);
-        mapper.updProfilePic(p);
+        User user = repository.getReferenceById(signedUserId);
+        user.setPic(fileNm);
+        repository.save(user);
 
         //기존 폴더 삭제
         try {
             //  D:/2024-01/download/greengram_tdd/user/600
-            String midPath = String.format("user/%d", p.getSignedUserId());
+            String midPath = String.format("user/%d", signedUserId);
             String delAbsoluteFolderPath = String.format("%s/%s", customFileUtils.uploadPath, midPath);
             customFileUtils.deleteFolder(delAbsoluteFolderPath);
 

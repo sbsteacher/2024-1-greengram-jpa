@@ -1,8 +1,9 @@
 package com.green.greengram.userfollow;
 
-import com.green.greengram.userfollow.model.UserFollowReq;
+import com.green.greengram.userfollow.model.UserFollowDeleteReq;
+import com.green.greengram.userfollow.model.UserFollowPostReq;
 
 public interface UserFollowService {
-    int postUserFollow(UserFollowReq p);
-    int deleteUserFollow(UserFollowReq p);
+    int postUserFollow(UserFollowPostReq p);
+    int deleteUserFollow(UserFollowDeleteReq p);
 }

@@ -5,19 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.beans.ConstructorProperties;
-
 @Getter
-@Setter
 @EqualsAndHashCode
-public class UserFollowReq {
+public class UserFollowPostReq {
     @Schema(example = "2", description = "팔로잉 유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     private long toUserId;
-
-    @ConstructorProperties({ "to_user_id" })
-    public UserFollowReq(long toUserId) {
-        this.toUserId = toUserId;
-    }
-
-
 }

@@ -7,3 +7,5 @@ public interface ErrorCode {
     HttpStatus getHttpStatus(); //httpStatus 멤버필드의 getter
     String getMessage(); //message 멤버필드의 getter
 }
+
+
