@@ -37,8 +37,8 @@ public class UserFollowServiceImpl implements UserFollowService {
 
     @Override
     public int deleteUserFollow(UserFollowDeleteReq p) {
-        //p.setFromUserId(authenticationFacade.getLoginUserId());
-        //return mapper.delUserFollow(p);
+        UserFollow userFollow = repository.findUserFollowByFromUserAndToUser(authenticationFacade.getLoginUserId(), p.getToUserId());
+        repository.delete(userFollow);
         return 1;
     }
 }

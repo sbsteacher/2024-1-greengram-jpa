@@ -12,6 +12,7 @@ public class UserFollowDeleteReq {
     @Schema(name="to_user_id", example = "2", description = "팔로잉 유저 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
     private long toUserId;
 
+    //생성자를 통해 주입
     @ConstructorProperties({ "to_user_id" })
     public UserFollowDeleteReq(long toUserId) {
         this.toUserId = toUserId;
