@@ -29,9 +29,7 @@ public class UserFollowServiceImpl implements UserFollowService {
         UserFollow userFollow = new UserFollow();
         userFollow.setFromUser(fromUser);
         userFollow.setToUser(toUser);
-
         repository.save(userFollow);
-
         return 1;
     }
 

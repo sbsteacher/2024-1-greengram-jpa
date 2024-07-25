@@ -2,6 +2,7 @@ package com.green.greengram.feedfavorite.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.beans.ConstructorProperties;
@@ -10,6 +11,7 @@ import java.beans.ConstructorProperties;
 @ToString
 @EqualsAndHashCode
 public class FeedFavoriteReq {
+    @Schema(name = "feed_id")
     private long feedId; //feed_id
 
     @JsonIgnore

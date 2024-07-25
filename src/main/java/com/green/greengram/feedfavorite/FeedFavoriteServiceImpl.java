@@ -1,5 +1,7 @@
 package com.green.greengram.feedfavorite;
 
+import com.green.greengram.entity.Feed;
+import com.green.greengram.entity.FeedFavorite;
 import com.green.greengram.feedfavorite.model.FeedFavoriteReq;
 import com.green.greengram.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +14,17 @@ import org.springframework.stereotype.Service;
 public class FeedFavoriteServiceImpl implements FeedFavoriteService {
     private final FeedFavoriteMapper mapper;
     private final AuthenticationFacade authenticationFacade;
+    private final FeedFavoriteRepository repository;
+
 
     public int toggleReq(FeedFavoriteReq p) {
-        p.setUserId(authenticationFacade.getLoginUserId());
-        int result = mapper.delFeedFavorite(p);
-        if(result == 1) {
-            return 0;
+        FeedFavorite feedFavorite = repository.findFeedFavoriteByFeedIdAndSignedUserId(p.getFeedId(), authenticationFacade.getLoginUserId());
+        if(feedFavorite == null) {
+           repository.saveFeedFavorite(p.getFeedId(), authenticationFacade.getLoginUserId());
+           return 1;
         }
-        return mapper.insFeedFavorite(p);
+        repository.delete(feedFavorite);
+        return 1;
     }
 
 }
