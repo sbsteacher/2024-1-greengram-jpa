@@ -22,7 +22,6 @@
         ON A.user_id = B.user_id
         WHERE feed_id = #{feedId}
         LIMIT 3, 9999
-
     </select>
 
 

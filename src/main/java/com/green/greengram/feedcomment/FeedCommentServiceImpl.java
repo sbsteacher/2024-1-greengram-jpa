@@ -3,6 +3,8 @@ package com.green.greengram.feedcomment;
 import com.green.greengram.entity.Feed;
 import com.green.greengram.entity.FeedComment;
 import com.green.greengram.entity.User;
+import com.green.greengram.exception.CustomException;
+import com.green.greengram.exception.MemberErrorCode;
 import com.green.greengram.feed.FeedRepository;
 import com.green.greengram.feedcomment.model.FeedCommentDeleteReq;
 import com.green.greengram.feedcomment.model.FeedCommentGetRes;
@@ -46,8 +48,13 @@ public class FeedCommentServiceImpl implements FeedCommentService {
 
     @Override
     public int delFeedComment(FeedCommentDeleteReq p){
-        p.setSignedUserId(authenticationFacade.getLoginUserId());
-        return mapper.delFeedComment(p);
+        FeedComment fc = repository.getReferenceById(p.getFeedCommentId());
+        //fc.getUser().getUserId()를 그래프 탐색이라 호칭
+        if(fc.getUser().getUserId() != authenticationFacade.getLoginUserId()) {
+            throw new CustomException(MemberErrorCode.UNAUTHORIZED);
+        }
+        repository.delete(fc);
+        return 1;
     }
 
     @Override

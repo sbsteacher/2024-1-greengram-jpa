@@ -12,4 +12,6 @@ public interface FeedFavoriteRepository extends JpaRepository<FeedFavorite, Long
     @Query(value = "insert into feed_favorite ( feed_id, user_id, created_at ) VALUES ( :feedId, :userId, now() ) "
             , nativeQuery = true)
     void saveFeedFavorite(Long feedId, Long userId);
+
+
 }

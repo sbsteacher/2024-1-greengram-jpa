@@ -41,9 +41,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 //SecurityContextHolder.getContext()에 Authentication 객체 주소값을 담으면 인증(로그인)되었다고 인식
                 SecurityContextHolder.getContext().setAuthentication(auth); //로그인 처리
             }
-        } else {
-            request.setAttribute("exception", new CustomException(MemberErrorCode.UNAUTHENTICATED));
         }
+//        else {
+//            request.setAttribute("exception", new CustomException(MemberErrorCode.UNAUTHENTICATED));
+//        }
 
         filterChain.doFilter(request, response);
         /*

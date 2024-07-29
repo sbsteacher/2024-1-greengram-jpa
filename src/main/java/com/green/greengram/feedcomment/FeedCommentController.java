@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface FeedCommentController {
-    MyResponse<Long> postFeedComment(FeedCommentPostReq p);
-    //void postFeedComment(HttpServletResponse res, FeedCommentPostReq p) throws IOException;
+    //MyResponse<Long> postFeedComment(FeedCommentPostReq p);
+    void postFeedComment(HttpServletResponse res, FeedCommentPostReq p) throws IOException;
     MyResponse<List<FeedCommentGetRes>> getFeedCommentList(long feedId);
     MyResponse<Integer> delFeedFavorite(FeedCommentDeleteReq p);
 }
