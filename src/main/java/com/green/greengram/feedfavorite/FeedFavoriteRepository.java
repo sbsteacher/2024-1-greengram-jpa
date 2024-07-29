@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface FeedFavoriteRepository extends JpaRepository<FeedFavorite, Long> {
+    //JPQL
     @Query(" select ff from FeedFavorite ff WHERE ff.feed.feedId = :feedId AND ff.user.userId = :userId ")
     FeedFavorite findFeedFavoriteByFeedIdAndSignedUserId(Long feedId, Long userId);
 

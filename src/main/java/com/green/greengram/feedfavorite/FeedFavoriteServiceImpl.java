@@ -16,7 +16,6 @@ public class FeedFavoriteServiceImpl implements FeedFavoriteService {
     private final AuthenticationFacade authenticationFacade;
     private final FeedFavoriteRepository repository;
 
-
     public int toggleReq(FeedFavoriteReq p) {
         FeedFavorite feedFavorite = repository.findFeedFavoriteByFeedIdAndSignedUserId(p.getFeedId(), authenticationFacade.getLoginUserId());
         if(feedFavorite == null) {

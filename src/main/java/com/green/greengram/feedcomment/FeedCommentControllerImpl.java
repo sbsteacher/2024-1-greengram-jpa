@@ -32,10 +32,11 @@ public class FeedCommentControllerImpl implements FeedCommentController {
     private final ObjectMapper om;
 
     @PostMapping
-    public void postFeedComment(HttpServletResponse res, @RequestBody FeedCommentPostReq p) throws IOException {
+    //public void postFeedComment(HttpServletResponse res, @RequestBody FeedCommentPostReq p) throws IOException {
+    public MyResponse<Long> postFeedComment(@RequestBody FeedCommentPostReq p) {
         log.info("p: {}", p);
-        //long result = service.postFeedComment(p);
-        long result = 10;
+        long result = service.postFeedComment(p);
+        //long result = 10;
 
 
         MyResponse<Long> obj = MyResponse.<Long>builder()
@@ -43,15 +44,16 @@ public class FeedCommentControllerImpl implements FeedCommentController {
                         .resultMsg("응~ 댓글~")
                         .resultData(result)
                         .build();
+        return obj;
 
-        String json = om.writeValueAsString(obj);
-
-        res.resetBuffer();
-        res.setStatus(200);
-        res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        res.setCharacterEncoding("UTF-8");
-        res.getOutputStream().write(json.getBytes("UTF-8"));
-        res.flushBuffer();
+//        String json = om.writeValueAsString(obj);
+//
+//        res.resetBuffer();
+//        res.setStatus(200);
+//        res.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+//        res.setCharacterEncoding("UTF-8");
+//        res.getOutputStream().write(json.getBytes("UTF-8"));
+//        res.flushBuffer();
     }
 
     @GetMapping
