@@ -23,7 +23,7 @@ public class FeedFavoriteServiceImpl implements FeedFavoriteService {
            return 1;
         }
         repository.delete(feedFavorite);
-        return 1;
+        return 0;
     }
 
 }

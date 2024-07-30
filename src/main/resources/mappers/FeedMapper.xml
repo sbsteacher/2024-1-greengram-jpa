@@ -10,7 +10,7 @@
     </insert>
 
     <insert id="postFeedPics">
-        INSERT INTO feed_pics
+        INSERT INTO feed_pic
         ( feed_id , pic )
         VALUES
         <foreach item="pic" collection="fileNames" separator=",">
@@ -37,7 +37,7 @@
 
     <select id="getFeedPicsByFeedId">
         SELECT pic
-        FROM feed_pics
+        FROM feed_pic
         WHERE feed_id = #{feedId}
     </select>
 

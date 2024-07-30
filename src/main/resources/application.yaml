@@ -14,12 +14,18 @@ spring:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
   jpa:
+    database: mysql
     hibernate:
       ddl-auto: create #entity(테이블)를 서버 기동때마다 drop 후 새롭게 만든다.
-    show-sql: true #JPA만든 쿼리문 로그에 출력해줘
     properties:
       hibernate:
+        jdbc:
+          batch_size: 50 # JPA Batch 작업(Insert, Update)
         format_sql: true #로그 찍을 때 보기편하게 포맷팅해서 출력해줘
+        order_inserts: true # JPA Batch 작업(Insert, Update)
+        order_updates: true # JPA Batch 작업(Insert, Update)
+    show-sql: true #JPA만든 쿼리문 로그에 출력해줘
+
 
   security:
     oauth2:

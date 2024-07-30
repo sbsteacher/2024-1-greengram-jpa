@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class FeedPics extends CreatedAt {
+public class FeedPic extends CreatedAt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long feedPicId;
