@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.greengram.common.model.MyResponse;
 import com.green.greengram.feedcomment.model.FeedCommentDeleteReq;
 import com.green.greengram.feedcomment.model.FeedCommentGetRes;
+import com.green.greengram.feedcomment.model.FeedCommentGetResInterface;
 import com.green.greengram.feedcomment.model.FeedCommentPostReq;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,10 +64,10 @@ public class FeedCommentControllerImpl implements FeedCommentController {
     }
 
     @GetMapping
-    public MyResponse<List<FeedCommentGetRes>> getFeedCommentList(@RequestParam (name = "feed_id") long feedId) {
-        List<FeedCommentGetRes> list = service.feedCommentListGet(feedId);
+    public MyResponse<List<FeedCommentGetResInterface>> getFeedCommentList(@RequestParam (name = "feed_id") long feedId) {
+        List<FeedCommentGetResInterface> list = service.feedCommentListGet(feedId);
 
-        return MyResponse.<List<FeedCommentGetRes>>builder()
+        return MyResponse.<List<FeedCommentGetResInterface>>builder()
                 .statusCode(HttpStatus.OK)
                 .resultMsg(String.format("rows: %,d", list.size()))
                 .resultData(list)

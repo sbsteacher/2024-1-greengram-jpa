@@ -7,11 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class FeedCommentGetRes {
-    private long feedCommentId;
+public class FeedCommentGetRes  {
+    private Long feedCommentId;
     private String comment;
     private String createdAt;
-    private long writerId;
+    private Long writerId;
     private String writerNm;
     private String writerPic;
 }

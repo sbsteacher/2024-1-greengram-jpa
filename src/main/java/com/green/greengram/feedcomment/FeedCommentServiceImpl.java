@@ -8,6 +8,7 @@ import com.green.greengram.exception.MemberErrorCode;
 import com.green.greengram.feed.FeedRepository;
 import com.green.greengram.feedcomment.model.FeedCommentDeleteReq;
 import com.green.greengram.feedcomment.model.FeedCommentGetRes;
+import com.green.greengram.feedcomment.model.FeedCommentGetResInterface;
 import com.green.greengram.feedcomment.model.FeedCommentPostReq;
 import com.green.greengram.security.AuthenticationFacade;
 import com.green.greengram.user.UserRepository;
@@ -59,24 +60,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
     }
 
     @Override
-    public List<FeedCommentGetRes> feedCommentListGet(long feedId) {
-        Feed feed = new Feed();
-        feed.setFeedId(feedId);
-        List<FeedComment> list = repository.findAllFeedCommentByFeedOrderByFeedCommentId(feed);
-
-        List<FeedCommentGetRes> results = new ArrayList();
-        for(FeedComment feedComment : list) {
-            FeedCommentGetRes item = new FeedCommentGetRes();
-            results.add(item);
-
-            item.setFeedCommentId(feedComment.getFeedCommentId());
-            item.setComment(feedComment.getComment());
-            item.setCreatedAt(feedComment.getCreatedAt().toString());
-            item.setWriterId(feedComment.getUser().getUserId());
-            item.setWriterNm(feedComment.getUser().getNm());
-            item.setWriterPic(feedComment.getUser().getPic());
-        }
-
-        return results;
+    public List<FeedCommentGetResInterface> feedCommentListGet(long feedId) {
+        return repository.findAllByFeedCommentLimit3AndInfinity(feedId);
     }
 }
