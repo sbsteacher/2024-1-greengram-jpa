@@ -21,6 +21,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedMapper mapper;
     private final CustomFileUtils customFileUtils;
     private final AuthenticationFacade authenticationFacade;
+    private final FeedRepository repository;
 
     @Transactional
     public FeedPostRes postFeed(List<MultipartFile> pics, FeedPostReq p){

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -59,6 +60,23 @@ public class FeedCommentServiceImpl implements FeedCommentService {
 
     @Override
     public List<FeedCommentGetRes> feedCommentListGet(long feedId) {
-        return mapper.feedCommentList(feedId);
+        Feed feed = new Feed();
+        feed.setFeedId(feedId);
+        List<FeedComment> list = repository.findAllFeedCommentByFeedOrderByFeedCommentId(feed);
+
+        List<FeedCommentGetRes> results = new ArrayList();
+        for(FeedComment feedComment : list) {
+            FeedCommentGetRes item = new FeedCommentGetRes();
+            results.add(item);
+
+            item.setFeedCommentId(feedComment.getFeedCommentId());
+            item.setComment(feedComment.getComment());
+            item.setCreatedAt(feedComment.getCreatedAt().toString());
+            item.setWriterId(feedComment.getUser().getUserId());
+            item.setWriterNm(feedComment.getUser().getNm());
+            item.setWriterPic(feedComment.getUser().getPic());
+        }
+
+        return results;
     }
 }
